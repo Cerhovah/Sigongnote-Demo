@@ -1,0 +1,76 @@
+/* Focus surfaces: at most two tasks per view; originals and consent stay readable. */
+.focus-app { background:var(--paper); color:var(--ink); line-height:1.65; padding-bottom:calc(6.5rem + env(safe-area-inset-bottom)); }
+.focus-app .skip-link { top:0; transform:translateY(calc(-100% - 8px)); }
+.focus-app .skip-link:focus { transform:none; }
+.focus-app .content { max-width:680px; padding:20px 24px 32px; }
+.focus-topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; max-width:680px; margin:auto; padding:16px 24px 4px; }
+.focus-app .brand-mark { background:var(--primary); width:32px; height:32px; }
+.focus-app .brand { letter-spacing:-.03em; }
+.focus-heading { margin-bottom:24px; }
+.focus-app h1 { font-size:1.55rem; font-weight:700; letter-spacing:-.035em; line-height:1.4; }
+.focus-app h2 { font-size:1.25rem; font-weight:700; line-height:1.5; letter-spacing:-.025em; }
+.focus-app h1,.focus-app h2,.focus-app p,.focus-app strong,.focus-app li,.focus-app dd { overflow-wrap:anywhere; }
+.focus-app .muted,.focus-app .eyebrow { font-size:1rem; color:#435567; }
+.focus-heading .muted { margin-top:6px; }
+.focus-app .back { margin:0 0 12px; }
+.focus-block { background:white; border:1px solid #dbe2e8; border-radius:18px; padding:24px; margin:0 0 20px; }
+.focus-block>p,.focus-block>h2 { margin-bottom:16px; }
+.focus-block>p:last-child { margin-bottom:0; }
+.focus-app label { display:block; margin:8px 0; }
+.focus-app input,.focus-app select { font:inherit; color:var(--ink); border:1px solid #718393; background:white; border-radius:10px; padding:12px; min-height:56px; max-width:100%; width:100%; min-width:0; }
+.focus-app input::placeholder { color:#536475; }
+.focus-app .primary { background:var(--primary); color:white; margin-top:20px; min-height:60px; font-size:1rem; }
+.focus-app .primary:hover { background:var(--primary-press); }
+.focus-app .secondary { color:#233d4b; border-color:#8c9ca7; background:white; font-size:1rem; min-height:52px; }
+.focus-app .text-button { color:#315466; font-size:1rem; min-width:48px; min-height:48px; }
+.focus-app button:disabled { opacity:.55; cursor:default; }
+.focus-app button,.focus-app a { touch-action:manipulation; overflow-wrap:anywhere; }
+.focus-app button:focus-visible,.focus-app a:focus-visible,.focus-app select:focus-visible,.focus-app input:focus-visible,.focus-app summary:focus-visible { outline:3px solid var(--focus); outline-offset:4px; }
+.focus-app .full-width { width:100%; margin-top:8px; }
+.focus-app .menu-row { width:100%; min-height:72px; padding:16px 0; background:transparent; color:var(--ink); border:0; border-bottom:1px solid #e2e7ec; border-radius:0; text-align:left; text-decoration:none; display:flex; gap:16px; align-items:center; justify-content:space-between; font-size:1rem; }
+.focus-app .menu-row:last-child { border-bottom:0; }
+.focus-app .menu-row>span:first-child { flex:1; min-width:0; }
+.focus-app .menu-row strong { display:block; font-weight:700; }
+.focus-app .menu-row .muted { display:block; margin-top:4px; }
+.focus-app .menu-row:hover { background:#f3f7f5; }
+.focus-app .menu-row>span:last-child:not(:first-child) { flex-shrink:0; }
+.focus-app .plain-list li { border:0; }
+.focus-app .plain-list li:not(:last-child) { border-bottom:1px solid #e2e7ec; }
+.focus-app .quiet-actions { gap:8px; flex-wrap:wrap; }
+.focus-app .quiet-actions>* { flex:1 1 140px; }
+.focus-app .pagination { display:flex; gap:12px; margin-top:16px; }
+.focus-app .pagination>* { flex:1; }
+.focus-app .result-count { margin-bottom:4px; font-variant-numeric:tabular-nums; }
+.focus-app .search-block { padding-block:16px; }
+.focus-app .search-block label { margin-top:0; }
+.focus-app .source-reader { margin-top:20px; white-space:pre-wrap; overflow-wrap:anywhere; }
+.focus-app .source-reader p { margin-bottom:16px; }
+.focus-app .document-glimpse { margin:16px 0; padding:16px; border-left:3px solid #cad9d2; background:#f5f8f6; }
+.focus-app .document-glimpse p { margin-bottom:8px; }
+.focus-app .document-glimpse p:last-child { margin:0; }
+.focus-app details { margin-top:16px; border-top:1px solid #dbe2e8; }
+.focus-app summary { cursor:pointer; padding:12px 0; min-height:48px; }
+.focus-app .notice { padding:16px; margin:0 0 20px; border-radius:12px; }
+.focus-app .receipt { color:var(--ok); background:var(--ok-soft); }
+.focus-app .error,.focus-app .attention { color:#913311; }
+.focus-app .error { background:#fff0e9; }
+.focus-app .attention-block { border-color:#c38c64; background:#fff9f2; }
+.focus-app .help-tip { padding-block:8px; background:transparent; border-style:dashed; }
+.focus-app .guide-symbol { color:var(--primary); font-size:2.8rem; font-weight:700; letter-spacing:-.05em; margin-bottom:16px; }
+.focus-app .guide-copy { font-size:1.12rem; }
+.focus-app .bottom-nav { background:white; padding-inline:12px; }
+.focus-app .bottom-nav a { color:#435567; font-size:1rem; }
+.focus-app .bottom-nav [aria-current] { background:var(--primary-soft); color:var(--primary); }
+.focus-app .money-value { font-size:1.3rem; font-weight:700; font-variant-numeric:tabular-nums; }
+.focus-app dl { margin:0; }
+.focus-app dt { color:#435567; margin-top:16px; }
+.focus-app dd { margin:4px 0 16px; }
+.focus-app .copy-list { padding-left:20px; }
+.focus-app .copy-list li { margin:12px 0; }
+.focus-app .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+@media(max-width:430px) { .focus-topbar { padding:12px 16px 4px; } .focus-app .content { padding:16px 16px 24px; } .focus-block { padding:20px; } .focus-heading { margin-bottom:20px; } }
+@media(max-width:350px) { .focus-topbar { padding-inline:12px; } .focus-app .content { padding-inline:12px; } .focus-block { padding:16px; } .focus-topbar { flex-wrap:wrap; } }
+@media(max-height:450px) { .focus-app .bottom-nav { position:static; } .focus-app { padding-bottom:0; } }
+
+.focus-app .folder-kind-choice { display:flex; align-items:center; gap:12px; min-height:56px; margin:8px 0; cursor:pointer; }
+.focus-app .folder-kind-choice input { width:24px; min-width:24px; height:24px; min-height:24px; padding:0; margin:0; flex:0 0 24px; accent-color:var(--primary); }

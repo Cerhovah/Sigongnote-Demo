@@ -1,0 +1,15 @@
+.setup-layout .screen-body { display: grid; gap: 20px; }
+.setup-layout .setup-progress { font-size: 18px; line-height: 1.7; color: var(--ink-2); margin: 0; }
+.setup-layout blockquote { margin: 16px 0 0; padding: 0 0 0 16px; border-left: 3px solid currentColor; white-space: pre-wrap; overflow-wrap: anywhere; }
+.setup-layout select, .setup-install select { max-width: 100%; min-width: 0; width: 100%; }
+.setup-install { display: grid; gap: 20px; min-width: 0; }
+.setup-install li, .setup-lessons li { margin-bottom: 16px; line-height: 1.7; }
+.setup-layout details, .setup-install details { min-width: 0; }
+.setup-layout summary, .setup-install summary, .install-page summary { padding-block: 14px; min-height: 48px; font-size: 18px; cursor: pointer; }
+.setup-install .text-link { overflow-wrap: anywhere; }
+.setup-install h2 { margin-block: 0; }
+.setup-lessons p { margin-block: 4px 16px; }
+.setup-layout .text-button, .setup-install .text-button { min-height: 48px; font-size: 18px; white-space: normal; }
+.install-page .setup-install select { min-height: 52px; font: inherit; font-size: 18px; font-weight: 400; padding: 10px 12px; border: 1px solid var(--ink-2); border-radius: 10px; background: var(--surface, #fff); color: inherit; }
+
+.install-page .setup-install select:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }

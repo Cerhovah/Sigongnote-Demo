@@ -1,0 +1,13 @@
+ALTER TABLE folder_sources ADD COLUMN kind TEXT NOT NULL DEFAULT 'folder';
+ALTER TABLE folder_sources ADD COLUMN historyMode TEXT NOT NULL DEFAULT 'legacy_recent';
+ALTER TABLE folder_sources ADD COLUMN historySinceEpochMs INTEGER;
+ALTER TABLE folder_sources ADD COLUMN scopeMode TEXT NOT NULL DEFAULT 'work_dedicated';
+ALTER TABLE folder_sources ADD COLUMN scopeFingerprint TEXT;
+ALTER TABLE folder_sources ADD COLUMN serverUploadConsent INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE folder_sources ADD COLUMN processingPolicyId TEXT;
+ALTER TABLE folder_sources ADD COLUMN processingPolicySnapshot TEXT;
+ALTER TABLE folder_sources ADD COLUMN projectId TEXT;
+ALTER TABLE folder_sources ADD COLUMN encryptedProjectName TEXT;
+ALTER TABLE folder_sources ADD COLUMN bindingState TEXT NOT NULL DEFAULT 'local_only';
+ALTER TABLE folder_sources ADD COLUMN bindingError TEXT;
+UPDATE folder_sources SET bindingState='ready',serverUploadConsent=1 WHERE serverSourceId IS NOT NULL;

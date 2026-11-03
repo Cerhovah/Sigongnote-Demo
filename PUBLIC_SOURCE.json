@@ -1,0 +1,16 @@
+{
+  "upstream": "Cerhovah/Sigongnote",
+  "upstream_commit": "883c6a7e8c6a8f739fdc2f30a88ac27786831e9f",
+  "import_type": "public-source-snapshot",
+  "source_files": 1008,
+  "excluded_roots": [
+    "0.2 ver/",
+    ".github/workflows/"
+  ],
+  "excluded_files": [
+    "render.yaml",
+    ".mcp.json"
+  ],
+  "customer_data_included": false,
+  "history_included": false
+}

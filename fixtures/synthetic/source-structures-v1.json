@@ -1,0 +1,113 @@
+{
+  "fixture_version": "C08-structural-v1",
+  "locator_convention": "PDF page and spreadsheet row numbers are 1-based source labels; section/table/cell indexes are 0-based synthetic labels.",
+  "provenance": "Synthetic structural surrogates derived from the v2 case descriptions; no original customer bytes or private mapping are included.",
+  "documents": [
+    {
+      "id": "SF-I04",
+      "source_id": "I04",
+      "kind": "synthetic_structural",
+      "segments": [
+        {"locator": "SF-I04/section/0/table/0/row/0/cell/0", "source_locator_hint": "I04 body/table", "role": "scope", "raw": "표본 1EA", "value": "1", "unit": "ea"},
+        {"locator": "SF-I04/section/0/table/0/row/0/cell/1", "source_locator_hint": "I04 body/table", "role": "dimension", "raw": "733*2068*36"},
+        {"locator": "SF-I04/section/0/table/0/row/0/cell/2", "source_locator_hint": "I04 body/table", "role": "finish", "raw": "발주처 제공 마감재", "customer_supplied": true},
+        {"locator": "SF-I04/section/0/table/0/row/0/cell/3", "source_locator_hint": "I04 body/table", "role": "color_code", "raw": "SYN-COLOR-A"},
+        {"locator": "SF-I04/section/0/block/1", "source_locator_hint": "I04 body", "role": "planned_loading", "raw": "2026-06-22 오후", "status": "planned"}
+      ]
+    },
+    {
+      "id": "SF-I05",
+      "source_id": "I05",
+      "kind": "synthetic_structural",
+      "metadata": {"filename_site_hint": "현장 A"},
+      "segments": [
+        {"locator": "SF-I05/page/1/header", "source_locator_hint": "I05 PDF page 1", "role": "header_site_hint", "raw": "현장 B"},
+        {"locator": "SF-I05/page/1/address", "source_locator_hint": "I05 PDF page 1", "role": "delivery_address_hint", "raw": "장소 C"},
+        {"locator": "SF-I05/page/1/table/0/row/0", "source_locator_hint": "I05 PDF page 1 table", "role": "delivery_form", "raw": "문짝 40장", "value": "40", "unit": "panel", "price": null, "acceptance_signature": null},
+        {"locator": "SF-I05/page/2/table/0/row/0", "source_locator_hint": "I05 PDF page 2 table", "role": "representation_copy", "raw": "문짝 40장", "value": "40", "unit": "panel", "represents": "SF-I05/page/1/table/0/row/0", "price": null, "acceptance_signature": null}
+      ]
+    },
+    {
+      "id": "SF-I06",
+      "source_id": "I06",
+      "kind": "synthetic_structural",
+      "tables": [
+        {"locator": "SF-I06/table/0", "source_locator_hint": "I06 first logical table", "role": "logical_delivery", "rows": [
+          {"locator": "SF-I06/table/0/row/0", "item_type": "WD-5", "dimension": "1010*2140*40", "quantity": "1", "unit": "ea", "location": null},
+          {"locator": "SF-I06/table/0/row/1", "item_type": "WD-5", "dimension": "1011*2146*40", "quantity": "1", "unit": "ea", "location": null},
+          {"locator": "SF-I06/table/0/row/2", "item_type": "WD-6", "dimension": null, "quantity": "22", "unit": "ea", "location": null},
+          {"locator": "SF-I06/table/0/row/3", "item_type": "기타", "dimension": null, "quantity": "1", "unit": "ea", "location": null}
+        ]},
+        {"locator": "SF-I06/table/1", "source_locator_hint": "I06 repeated representation", "role": "representation_copy", "represents": "SF-I06/table/0", "rows": [
+          {"locator": "SF-I06/table/1/row/0", "quantity": "1", "unit": "ea"},
+          {"locator": "SF-I06/table/1/row/1", "quantity": "1", "unit": "ea"},
+          {"locator": "SF-I06/table/1/row/2", "quantity": "22", "unit": "ea"},
+          {"locator": "SF-I06/table/1/row/3", "quantity": "1", "unit": "ea"}
+        ]}
+      ]
+    },
+    {
+      "id": "SF-I07",
+      "source_id": "I07",
+      "kind": "synthetic_structural",
+      "tables": [
+        {"locator": "SF-I07/table/0", "source_locator_hint": "I07 alternate representation", "role": "representation_copy", "candidate_same_transaction_as": "SF-I06/table/0", "rows": [
+          {"locator": "SF-I07/table/0/row/0", "quantity": "1", "unit": "ea"},
+          {"locator": "SF-I07/table/0/row/1", "quantity": "1", "unit": "ea"},
+          {"locator": "SF-I07/table/0/row/2", "quantity": "22", "unit": "ea"},
+          {"locator": "SF-I07/table/0/row/3", "quantity": "1", "unit": "ea"}
+        ]}
+      ]
+    },
+    {
+      "id": "SF-I08",
+      "source_id": "I08",
+      "kind": "synthetic_structural",
+      "range_hint": "A4:I7",
+      "rows": [
+        {"locator": "SF-I08/sheet/0/row/4", "source_locator_hint": "I08 A4:I4", "role": "scope", "raw": "문틀 80틀", "quantity": "80", "unit": "frame"},
+        {"locator": "SF-I08/sheet/0/row/5", "source_locator_hint": "I08 A5:I5", "role": "labor", "days": "5", "daily_rate": "300000", "amount": "1500000", "payment": null},
+        {"locator": "SF-I08/sheet/0/row/6", "source_locator_hint": "I08 A6:I6", "role": "labor", "days": "4", "daily_rate": "300000", "amount": "1200000", "payment": null},
+        {"locator": "SF-I08/sheet/0/row/7", "source_locator_hint": "I08 A7:I7", "role": "summary_total", "amount": "2700000", "payment": null}
+      ]
+    },
+    {
+      "id": "SF-I09",
+      "source_id": "I09",
+      "kind": "synthetic_structural",
+      "range_hint": "A4:I7",
+      "rows": [
+        {"locator": "SF-I09/sheet/0/row/4", "source_locator_hint": "I09 parent bundle and first task", "role": "task", "bundle_parent": true, "location": "구역 A", "quantity": "1", "unit": "lump", "unit_price": null, "amount": "150000"},
+        {"locator": "SF-I09/sheet/0/row/5", "role": "task", "parent": "SF-I09/sheet/0/row/4", "location": "구역 B", "amount": null},
+        {"locator": "SF-I09/sheet/0/row/6", "role": "task", "parent": "SF-I09/sheet/0/row/4", "location": "구역 C", "amount": null},
+        {"locator": "SF-I09/sheet/0/row/7", "role": "task", "parent": "SF-I09/sheet/0/row/4", "location": "구역 D", "amount": null}
+      ]
+    },
+    {
+      "id": "SF-I10",
+      "source_id": "I10",
+      "kind": "synthetic_structural",
+      "range_hint": "A4:N10, A11:N301 blank template",
+      "rows": [
+        {"locator": "SF-I10/sheet/0/row/4", "role": "transaction", "supply": "100000", "vat": "10000", "gross": "110000", "payment_raw": "6.02"},
+        {"locator": "SF-I10/sheet/0/row/5", "role": "transaction", "supply": "90000", "vat": "9000", "gross": "99000", "payment_raw": "6.03"},
+        {"locator": "SF-I10/sheet/0/row/6", "role": "transaction", "supply": "80000", "vat": "8000", "gross": "88000", "payment_raw": "6.04"},
+        {"locator": "SF-I10/sheet/0/row/7", "role": "transaction", "supply": "110000", "vat": "11000", "gross": "121000", "payment_raw": "6.05"},
+        {"locator": "SF-I10/sheet/0/row/8", "role": "transaction", "supply": "70000", "vat": "7000", "gross": "77000", "payment_raw": "6.06"},
+        {"locator": "SF-I10/sheet/0/row/9", "role": "transaction", "supply": "100000", "vat": "10000", "gross": "110000", "payment_raw": "6.07"},
+        {"locator": "SF-I10/sheet/0/row/10", "role": "transaction", "supply": "90000", "vat": "9000", "gross": "99000", "payment_raw": "6.08"}
+      ],
+      "blank_template": {"locator": "SF-I10/sheet/0/rows/11-301", "source_locator_hint": "I10 rows 11:301", "row_count": 291, "cached_formula_zero_is_transaction": false}
+    },
+    {
+      "id": "SF-I12",
+      "source_id": "I12",
+      "kind": "synthetic_simulation",
+      "events": [
+        {"locator": "SF-I12/event/S16", "occurred_at": "2026-10-29T08:55:00Z", "recorded_at": "2026-10-29T09:00:00Z", "known_at": "2026-10-29T09:00:00Z"},
+        {"locator": "SF-I12/event/S17", "occurred_at": "2026-10-29T08:50:00Z", "recorded_at": "2026-10-29T09:05:00Z", "known_at": "2026-10-29T09:05:00Z"}
+      ],
+      "query_cutoff": "2026-10-29T09:00:00Z"
+    }
+  ]
+}

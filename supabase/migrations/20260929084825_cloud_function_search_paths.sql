@@ -1,0 +1,19 @@
+-- Cloud deployment: fixed name resolution for existing invoker functions.
+-- No ownership, privileges, bodies, or tenant policies change.
+alter function app.check_charge_allocation_sum() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_cash_application() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_cash_reconciled() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_charge_case_update() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_defect_link() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_export_batch() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_export_batch_line() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_external_handoff() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_invoice_approval() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_invoice_charge_link() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_invoice_reconciliation_write() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_noncash_settlement() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_product_document() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_submittal_item() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_submittal_reply() set search_path = pg_catalog, app, pg_temp;
+alter function app.guard_submittal_version() set search_path = pg_catalog, app, pg_temp;
+alter function app.invoice_settlement_remaining(uuid,uuid) set search_path = pg_catalog, app, pg_temp;

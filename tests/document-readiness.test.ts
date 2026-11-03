@@ -1,0 +1,52 @@
+import assert from 'node:assert/strict';
+import {test} from 'node:test';
+import {randomUUID} from 'node:crypto';
+import {processingFixture} from './processing-fixture.js';
+import {createApp} from '../services/api/src/app.js';
+import {refreshDocumentReadiness} from '../services/api/src/document-readiness.js';
+import {runAgentOnce} from '../services/api/src/agent-runs.js';
+test('N14 related updates only, concurrent restart, frozen issuance, durable conversation and withdrawal',async()=>{
+ const db=await processingFixture();let app:ReturnType<typeof createApp>|undefined;
+ try{
+  const today=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  const f=await db.createFixture(`견적 준비\n작업: 합성 창틀\n마진:20%\n부가세:별도 10%\n받는 곳:합성 의뢰인\n단가 기준일:${today}\n품명 | 규격 | 수량 | 단위 | 매입단가 | 판매단가\n창틀 | 표준 | 1 | 식 | 100 | 125`);
+  const project=randomUUID(),context=randomUUID(),other=randomUUID();
+  await db.admin`insert into app.projects(tenant_id,id,display_name) values(${f.tenant}::uuid,${project}::uuid,'합성 현장')`;
+  await db.admin`insert into app.work_contexts(tenant_id,id,project_id,label) values(${f.tenant}::uuid,${context}::uuid,${project}::uuid,'합성 창틀'),(${f.tenant}::uuid,${other}::uuid,${project}::uuid,'다른 업무')`;
+  await db.admin`update app.evidence_organizations set project_id=${project}::uuid,context_id=${context}::uuid,state='linked' where tenant_id=${f.tenant}::uuid and revision_id=${f.revision}::uuid`;
+  const refresh=()=>db.api.begin(async tx=>{await tx`select set_config('request.jwt.claim.sub',${f.user},true)`;await refreshDocumentReadiness(tx,f.tenant,f.user,context);});
+  await Promise.all([refresh(),refresh()]);
+  const pointers=()=>db.admin`select document_type,draft_id,version from app.document_readiness where tenant_id=${f.tenant}::uuid order by document_type`;
+  const initial=await pointers();assert.equal(initial.length,4);assert.ok(initial.every(r=>Number(r.version)===1));
+  const services={db:db.api,agentRuntime:true,capturePolicy:db.config.policy,verifyToken:async()=>({userId:f.user,sessionId:f.session})};app=createApp(services);
+  const headers={authorization:'Bearer synthetic','x-tenant-id':f.tenant};
+  const get=(url:string)=>app!.inject({method:'GET',url,headers});const post=(url:string,payload:object)=>app!.inject({method:'POST',url,headers,payload});
+  const draft=initial.find(r=>r.document_type==='estimate')!;
+  const shown=await get('/v1/document-drafts/'+draft.draft_id);assert.equal(shown.statusCode,200,shown.body);assert.equal(shown.json().state,'draft_ready',shown.body);
+  await db.admin`insert into app.work_projections(tenant_id,context_id) values(${f.tenant}::uuid,${other}::uuid)`;await refresh();assert.deepEqual(await pointers(),initial,'unrelated work must not regenerate drafts');
+  const issue=await post('/v1/documents/issue',{client_command_id:randomUUID(),drafts:[{id:draft.draft_id,basis_hash:shown.json().document.basis_hash}],recipient_confirmation:'합성 의뢰인'});assert.equal(issue.statusCode,201,issue.body);
+  const issuedId=issue.json().documents[0].id,issued=(await get('/v1/documents/'+issuedId)).json();
+  await db.admin`insert into app.work_projections(tenant_id,context_id) values(${f.tenant}::uuid,${context}::uuid)`;
+  assert.equal((await get('/v1/document-drafts/'+draft.draft_id)).json().stale,true);
+  await Promise.all([refresh(),refresh()]);assert.ok((await pointers()).every(r=>Number(r.version)===2));assert.equal((await get('/v1/documents/'+issuedId)).json().snapshot_hash,issued.snapshot_hash);
+  const completion={client_command_id:randomUUID(),recipient:'합성 변경 수신처'};
+  const completed=await post('/v1/document-drafts/'+draft.draft_id+'/complete',completion);assert.equal(completed.statusCode,200,completed.body);
+  assert.deepEqual((await post('/v1/document-drafts/'+draft.draft_id+'/complete',completion)).json(),completed.json());
+  assert.equal((await get('/v1/document-drafts/'+completed.json().id)).json().document.recipient.name,'합성 변경 수신처');
+  const ambiguous=await post('/v1/agent/runs',{client_turn_id:randomUUID(),project_id:project,instruction:'견적서 준비해줘',input_kind:'text'});
+  await runAgentOnce(services,{},f.tenant);const choices=(await get('/v1/agent/runs/'+ambiguous.json().run_id)).json();assert.equal(choices.document_choices.contexts.length,2);assert.match(choices.text,/어느 일/);
+  const picked=await post('/v1/agent/runs',{client_turn_id:randomUUID(),project_id:project,instruction:'선택한 업무의 문서 준비',input_kind:'text',document_request:{type:'estimate',context_id:context}});await runAgentOnce(services,{},f.tenant);assert.equal((await get('/v1/agent/runs/'+picked.json().run_id)).json().document_refs.length,1);
+  const otherCompany=await db.createFixture();const hidden=await app.inject({method:'GET',url:'/v1/document-drafts/'+completed.json().id,headers:{...headers,'x-tenant-id':otherCompany.tenant}});assert.equal(hidden.statusCode,404);
+  const run=await post('/v1/agent/runs',{client_turn_id:randomUUID(),project_id:project,instruction:'견적서 준비해줘',input_kind:'text'});assert.equal(run.statusCode,202);
+  const plan={calls:[{tool:'prepare_document',input:JSON.stringify({type:'estimate',context_id:context})}],done:true,missing:'none'};
+  await db.admin`update app.agent_runs set plan=${db.admin.json(plan)} where tenant_id=${f.tenant}::uuid and id=${run.json().run_id}::uuid`;
+  assert.equal(await runAgentOnce(services,{},f.tenant),'stored');
+  const before=(await db.admin`select count(*)::int n from app.document_drafts where tenant_id=${f.tenant}::uuid`)[0]!.n;
+  for(let i=0;i<3;i++){const r=await get('/v1/agent/runs/'+run.json().run_id);assert.equal(r.json().document_refs.length,1,r.body);}
+  assert.equal((await db.admin`select count(*)::int n from app.document_drafts where tenant_id=${f.tenant}::uuid`)[0]!.n,before);
+  await db.admin`insert into app.evidence_retention_tasks(tenant_id,revision_id,source_id,source_generation) values(${f.tenant}::uuid,${f.revision}::uuid,${f.source}::uuid,1)`;
+  assert.equal((await get('/v1/agent/runs/'+run.json().run_id)).json().document_refs.length,0);
+  assert.equal((await get('/v1/documents')).json().prepared.length,0);
+  assert.equal((await db.api`select * from app.document_readiness`).length,0);await assert.rejects(db.worker`select * from app.document_readiness`,/permission denied/);
+ }finally{await app?.close();await db.cleanup();}
+});

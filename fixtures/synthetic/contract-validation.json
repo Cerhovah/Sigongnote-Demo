@@ -1,0 +1,286 @@
+[
+  {
+    "label": "money \"1\\n\"",
+    "name": "Money",
+    "value": {
+      "currency": "KRW",
+      "knowledge": "known",
+      "minor": "1\n"
+    },
+    "accepted": false
+  },
+  {
+    "label": "quantity \"1\\n\"",
+    "name": "Quantity",
+    "value": {
+      "value": "1\n",
+      "unit_code": "ea",
+      "raw_text": "합성 자료",
+      "semantic": "ordered"
+    },
+    "accepted": false
+  },
+  {
+    "label": "money \"1５\"",
+    "name": "Money",
+    "value": {
+      "currency": "KRW",
+      "knowledge": "known",
+      "minor": "1５"
+    },
+    "accepted": false
+  },
+  {
+    "label": "quantity \"1５\"",
+    "name": "Quantity",
+    "value": {
+      "value": "1５",
+      "unit_code": "ea",
+      "raw_text": "합성 자료",
+      "semantic": "ordered"
+    },
+    "accepted": false
+  },
+  {
+    "label": "money \"١\"",
+    "name": "Money",
+    "value": {
+      "currency": "KRW",
+      "knowledge": "known",
+      "minor": "١"
+    },
+    "accepted": false
+  },
+  {
+    "label": "quantity \"١\"",
+    "name": "Quantity",
+    "value": {
+      "value": "١",
+      "unit_code": "ea",
+      "raw_text": "합성 자료",
+      "semantic": "ordered"
+    },
+    "accepted": false
+  },
+  {
+    "label": "money \"1\"",
+    "name": "Money",
+    "value": {
+      "currency": "KRW",
+      "knowledge": "known",
+      "minor": "1"
+    },
+    "accepted": true
+  },
+  {
+    "label": "quantity \"1\"",
+    "name": "Quantity",
+    "value": {
+      "value": "1",
+      "unit_code": "ea",
+      "raw_text": "합성 자료",
+      "semantic": "ordered"
+    },
+    "accepted": true
+  },
+  {
+    "label": "money \"0\"",
+    "name": "Money",
+    "value": {
+      "currency": "KRW",
+      "knowledge": "known",
+      "minor": "0"
+    },
+    "accepted": true
+  },
+  {
+    "label": "quantity \"0\"",
+    "name": "Quantity",
+    "value": {
+      "value": "0",
+      "unit_code": "ea",
+      "raw_text": "합성 자료",
+      "semantic": "ordered"
+    },
+    "accepted": true
+  },
+  {
+    "label": "money \"-1\"",
+    "name": "Money",
+    "value": {
+      "currency": "KRW",
+      "knowledge": "known",
+      "minor": "-1"
+    },
+    "accepted": true
+  },
+  {
+    "label": "quantity \"-1\"",
+    "name": "Quantity",
+    "value": {
+      "value": "-1",
+      "unit_code": "ea",
+      "raw_text": "합성 자료",
+      "semantic": "ordered"
+    },
+    "accepted": true
+  },
+  {
+    "label": "money \"0.000001\"",
+    "name": "Money",
+    "value": {
+      "currency": "KRW",
+      "knowledge": "known",
+      "minor": "0.000001"
+    },
+    "accepted": false
+  },
+  {
+    "label": "quantity \"0.000001\"",
+    "name": "Quantity",
+    "value": {
+      "value": "0.000001",
+      "unit_code": "ea",
+      "raw_text": "합성 자료",
+      "semantic": "ordered"
+    },
+    "accepted": true
+  },
+  {
+    "label": "money \"1 \"",
+    "name": "Money",
+    "value": {
+      "currency": "KRW",
+      "knowledge": "known",
+      "minor": "1 "
+    },
+    "accepted": false
+  },
+  {
+    "label": "quantity \"1 \"",
+    "name": "Quantity",
+    "value": {
+      "value": "1 ",
+      "unit_code": "ea",
+      "raw_text": "합성 자료",
+      "semantic": "ordered"
+    },
+    "accepted": false
+  },
+  {
+    "label": "time \"2026-09-28T00:00:00Z\"",
+    "name": "SourceDate",
+    "value": {
+      "raw": "2026-09-28T00:00:00Z",
+      "precision": "time",
+      "date": "2026-09-28T00:00:00Z",
+      "inferred_components": []
+    },
+    "accepted": true
+  },
+  {
+    "label": "time \"2026-09-28T00:00:00Z\\n\"",
+    "name": "SourceDate",
+    "value": {
+      "raw": "2026-09-28T00:00:00Z\n",
+      "precision": "time",
+      "date": "2026-09-28T00:00:00Z\n",
+      "inferred_components": []
+    },
+    "accepted": false
+  },
+  {
+    "label": "time \"2026-09-28T09:00:00+09:00\"",
+    "name": "SourceDate",
+    "value": {
+      "raw": "2026-09-28T09:00:00+09:00",
+      "precision": "time",
+      "date": "2026-09-28T09:00:00+09:00",
+      "inferred_components": []
+    },
+    "accepted": false
+  },
+  {
+    "label": "time \"2026-02-30T00:00:00Z\"",
+    "name": "SourceDate",
+    "value": {
+      "raw": "2026-02-30T00:00:00Z",
+      "precision": "time",
+      "date": "2026-02-30T00:00:00Z",
+      "inferred_components": []
+    },
+    "accepted": false
+  },
+  {
+    "label": "UUID newline",
+    "name": "BridgeRequest",
+    "value": {
+      "bridgeVersion": 1,
+      "requestId": "11111111-1111-4111-8111-111111111111\n",
+      "method": "getQueueSummary",
+      "payload": {}
+    },
+    "accepted": false
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "ledger.list",
+      "project_id": "0f8fad5b-d9cb-469f-a165-70867728950e",
+      "category": "delivery_work",
+      "cursor": "YWJjZA"
+    },
+    "accepted": true,
+    "label": "ledger scopes"
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "ledger.list",
+      "project_id": "0f8fad5b-d9cb-469f-a165-70867728950e",
+      "category": "delivery_work",
+      "cursor": "a&b"
+    },
+    "accepted": false,
+    "label": "ledger query injection"
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "ledger.list",
+      "project_id": "0f8fad5b-d9cb-469f-a165-70867728950e",
+      "category": "paid",
+      "cursor": "YWJjZA"
+    },
+    "accepted": false,
+    "label": "ledger invalid category"
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "ledger.read",
+      "id": "0f8fad5b-d9cb-469f-a165-70867728950e",
+      "cursor": "0f8fad5b-d9cb-469f-a165-70867728950e"
+    },
+    "accepted": true,
+    "label": "ledger read page"
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "ledger.read",
+      "id": "0f8fad5b-d9cb-469f-a165-70867728950e",
+      "tenant_id": "0f8fad5b-d9cb-469f-a165-70867728950e"
+    },
+    "accepted": false,
+    "label": "ledger caller authority"
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "agenda.read"
+    },
+    "accepted": true,
+    "label": "agenda read"
+  }
+]

@@ -1,0 +1,1 @@
+ALTER TABLE `share_inbox` ADD COLUMN `retentionHold` INTEGER NOT NULL DEFAULT 0;

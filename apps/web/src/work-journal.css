@@ -1,0 +1,51 @@
+/* 날짜별 기록: 날짜 머리 아래 한 줄 행(오늘·현장 화면) 또는 내용이 보이는 항목(전체 일지) */
+.work-app .journal{display:grid;gap:10px;min-width:0}
+.work-app .journal .list-head .journal-add{width:auto;min-height:48px;padding:4px 12px;font-size:var(--text-sm);gap:4px}
+.work-app .journal-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:4px 0}
+.work-app .journal-filters label{display:flex;flex-direction:column;gap:6px;font-size:var(--text-sm);font-weight:700}
+.work-app .journal-filters :is(input,select){min-height:48px;font-size:var(--text-sm)}
+.work-app .journal-list{list-style:none;padding:0;margin:0}
+.work-app .journal-date{font-size:.9375rem;font-weight:800;color:var(--ink-2);margin:14px 0 2px;letter-spacing:.02em}
+.work-app .journal-list>li:first-child .journal-date{margin-top:2px}
+/* 한 줄 행 */
+.work-app .journal-row{display:grid;grid-template-columns:52px minmax(0,1fr) 20px;align-items:center;gap:10px;width:100%;min-height:56px;padding:8px 0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;text-align:left;color:var(--ink)}
+.work-app .journal-row:hover{background:var(--surface-2)}
+.work-app .journal-row>svg{color:var(--ink-3)}
+.work-app .journal-when{font-size:var(--text-sm);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.work-app .journal-row-body{display:grid;gap:1px;min-width:0}
+.work-app .journal-row-body strong{font-size:var(--text-sm);font-weight:800;line-height:1.4}
+.work-app .journal-row-body small{display:block;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.5}
+/* 내용이 보이는 항목 */
+.work-app .journal-entry{display:grid;gap:8px;padding:12px 0 14px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.work-app .journal-meta{font-size:var(--text-sm);color:var(--ink-2);margin:0}
+.work-app .journal-excerpt{white-space:pre-wrap;line-height:1.6;margin:0;max-height:9em;overflow:auto}
+.work-app .journal-tags{display:flex;flex-wrap:wrap;gap:6px}
+.work-app .journal-tags span{border-radius:6px;background:var(--primary-soft);padding:2px 8px;font-size:.9375rem;color:var(--primary);font-weight:700}
+.work-app .journal-entry details{margin:0}
+.work-app .journal-entry summary{min-height:48px;display:flex;align-items:center;cursor:pointer;color:var(--primary);font-size:var(--text-sm);font-weight:700}
+.work-app .journal-empty{display:grid;gap:4px;justify-items:start;padding:4px 0;color:var(--ink-2);font-size:var(--text-sm)}
+.work-app .journal-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.work-app .journal-draft form{display:grid;gap:12px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.work-app .journal-tasks>p{margin-block:4px}
+.work-app .journal-done-filter{display:flex;align-items:center;gap:10px;width:fit-content;min-height:40px;font-size:var(--text-sm);font-weight:700;cursor:pointer}
+.work-app .journal-done-filter input{appearance:auto;flex:0 0 24px;width:24px;height:24px;min-height:24px;margin:0;padding:0;accent-color:var(--primary)}
+@media(max-width:480px){.work-app .journal-filters{grid-template-columns:1fr}}
+
+.work-app .journal-entry:not([open])>:not(summary){display:none}
+.work-app .journal-entry>summary{font-size:1.125rem;gap:6px}
+.work-app .journal-entry>summary::after{content:"›";margin-left:auto;font-size:1.5rem}
+.work-app .journal-entry[open]>summary::after{transform:rotate(90deg)}
+.work-app .work-event-detail{display:grid;gap:24px;min-width:0}
+.work-app .work-event-detail section{display:grid;gap:10px;min-width:0}
+.work-app .work-event-detail h3{font-size:1.125rem}
+.work-app .event-source{border-top:1px solid var(--line);padding-top:16px}
+.work-app .event-source-text{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;max-width:100%}
+.work-app .event-observations{display:grid;gap:16px;margin-top:16px}
+.work-app .event-observations>li{border-bottom:1px solid var(--line);padding-bottom:16px;min-width:0}
+.work-app .event-observations summary{min-height:48px;display:flex;align-items:center;cursor:pointer}
+.work-app .ai-consent{display:grid;gap:12px}
+.work-app .ai-consent h2{font-size:1.125rem}
+.work-app .draft-line-input{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;border:1px solid var(--line);padding:12px;border-radius:8px}
+.work-app .draft-line-input>label:first-of-type{grid-column:1/-1}
+.work-app .draft-line-input .field{min-width:0}
+.work-app .draft-line-input input{min-width:0;width:100%}

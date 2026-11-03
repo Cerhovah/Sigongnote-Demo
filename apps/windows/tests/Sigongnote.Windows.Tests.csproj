@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup><TargetFramework>net10.0-windows</TargetFramework><UseWindowsForms>true</UseWindowsForms><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings><IsTestProject>true</IsTestProject><RestorePackagesWithLockFile>true</RestorePackagesWithLockFile><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
+<ItemGroup>
+  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+  <PackageReference Include="MSTest.TestFramework" Version="4.4.1" />
+  <PackageReference Include="MSTest.TestAdapter" Version="4.4.1" />
+  <ProjectReference Include="../Sigongnote.Windows.csproj" />
+</ItemGroup>
+</Project>

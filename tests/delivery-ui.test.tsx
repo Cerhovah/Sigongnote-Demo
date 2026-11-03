@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {test} from 'node:test';
+import {JSDOM} from 'jsdom';
+import {act} from 'react';
+import {DeliveryPanel,PhotoSheetShare} from '../apps/web/src/work-delivery.js';
+import type {WorkClient,WorkRequest} from '../apps/web/src/work-client.js';
+test('N20 prepared delivery requires a sending gesture; missing connection stays disabled; share cancellation recorded',async()=>{
+ const dom=new JSDOM('<div id="root"></div>',{url:'http://localhost/',pretendToBeVisual:true}),w=dom.window;Object.assign(globalThis,{window:w,document:w.document,location:w.location,HTMLElement:w.HTMLElement,IS_REACT_ACT_ENVIRONMENT:true});const {createRoot}=await import('react-dom/client'),root=createRoot(w.document.getElementById('root')!);
+ const commands:WorkRequest[]=[];let enabled=false;const client:WorkClient={kind:'native',dispose(){},async request<T>(r:WorkRequest){commands.push(r);if(r.route==='deliveries.list')return {deliveries:[{id:'prepared',title:'시험 사진대지',pages:1,recipient_name:'합성 수신처',recipient_number:'00000000000',scope_hash:'a'.repeat(64),state:'prepared',cancel_reason:null,available:true,attempts:0,submitted_attempts:0,pending_cost_krw:0,known_cost_krw:0,reserved_krw:null,actual_krw:null}],recipients:[],project_id:'site',ready:enabled,max_cost_krw:enabled?10:null,gate:enabled?null:'팩스 연결 준비 중'} as T;if(r.route==='sheets.file')return {outcome:'cancelled',message:'공유를 취소했어요.'} as T;return {} as T;}};
+ const open=async()=>act(async()=>{const details=w.document.querySelector('details')!;details.open=true;details.dispatchEvent(new w.Event('toggle'));});
+ try{await act(async()=>root.render(<DeliveryPanel client={client} kind="photo_sheet" id="sheet"/>));assert.equal(commands.length,0);await open();const send=()=>[...w.document.querySelectorAll<HTMLButtonElement>('button')].find(b=>b.textContent?.includes('에 팩스 보내기'))!;assert.equal(send().disabled,true);assert.ok(!commands.some(r=>r.route==='deliveries.authorize'));
+  enabled=true;await act(async()=>root.render(<DeliveryPanel key="enabled" client={client} kind="photo_sheet" id="sheet"/>));await open();assert.equal(send().disabled,false);assert.ok(!commands.some(r=>r.route==='deliveries.authorize'));await act(async()=>send().click());assert.ok(!commands.some(r=>r.route==='deliveries.authorize'));assert.match(w.document.body.textContent!,/최대 10원/);await act(async()=>[...w.document.querySelectorAll<HTMLButtonElement>('button')].find(b=>b.textContent==='네, 보냅니다')!.click());const request=commands.find(r=>r.route==='deliveries.authorize')!;assert.equal(JSON.parse((request as {command:string}).command).max_cost_krw,10);
+  await act(async()=>root.render(<PhotoSheetShare client={client} id="sheet"/>));await act(async()=>w.document.querySelector<HTMLButtonElement>('button')!.click());const outcomes=commands.filter(r=>r.route==='sheets.share').map(r=>JSON.parse((r as {command:string}).command).outcome);assert.deepEqual(outcomes,['prepared','cancelled']);assert.match(w.document.body.textContent!,/공유를 취소/);
+ }finally{await act(async()=>root.unmount());w.close();}
+});

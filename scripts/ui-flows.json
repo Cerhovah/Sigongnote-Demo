@@ -1,0 +1,164 @@
+[
+  {
+    "name": "new-site",
+    "hash": "materials/new",
+    "steps": [
+      {
+        "expect": {
+          "heading": "현장 추가"
+        }
+      },
+      {
+        "fill": [
+          "현장 이름",
+          "합성 새 현장"
+        ]
+      },
+      {
+        "click": "이 현장 추가"
+      }
+    ],
+    "expect": {
+      "heading": "합성 새 현장"
+    }
+  },
+  {
+    "name": "first-record",
+    "hash": "setup",
+    "scenario": "first-use",
+    "steps": [
+      {
+        "expect": {
+          "heading": "자료 연결"
+        }
+      },
+      {
+        "click": "파일 추가"
+      }
+    ],
+    "expect": {
+      "heading": "자료 추가",
+      "button": "자료 선택",
+      "enabled": true
+    }
+  },
+  {
+    "name": "today-site-document",
+    "hash": "today",
+    "steps": [
+      {
+        "expect": {
+          "heading": "오늘"
+        }
+      },
+      {
+        "shot": "today"
+      },
+      {
+        "click": "현장"
+      },
+      {
+        "click": "합성 햇살현장"
+      },
+      {
+        "expect": {
+          "heading": "합성 햇살현장"
+        }
+      },
+      {
+        "shot": "site"
+      },
+      {
+        "click": "문서"
+      }
+    ],
+    "expect": {
+      "heading": "문서",
+      "button": "문서 만들기"
+    }
+  },
+  {
+    "name": "document-draft",
+    "hash": "documents",
+    "steps": [
+      {
+        "click": "문서 만들기"
+      },
+      {
+        "select": [
+          "현장",
+          "합성 햇살현장"
+        ]
+      },
+      {
+        "click": "내일 오전 석고보드 20장 추가 납품 부탁드립니다."
+      }
+    ],
+    "expect": {
+      "heading": "문서 준비",
+      "button": "답하고 초안 이어서 준비",
+      "enabled": true
+    }
+  },
+  {
+    "name": "event-evidence-correction",
+    "hash": "today",
+    "steps": [
+      {
+        "click": "내일 자재 납품 요청 접수"
+      },
+      {
+        "expect": {
+          "heading": "업무 기록",
+          "text": "내일 자재 납품 요청 접수"
+        }
+      },
+      {
+        "shot": "event-evidence"
+      },
+      {
+        "click": "현장·내용 수정"
+      },
+      {
+        "fill": [
+          "수정 이유",
+          "합성 연락의 현장 확인"
+        ]
+      },
+      {
+        "click": "수정 저장"
+      }
+    ],
+    "expect": {
+      "heading": "업무 기록",
+      "text": "내일 자재 납품 요청 접수",
+      "button": "현장·내용 수정",
+      "enabled": true
+    }
+  },
+  {
+    "name": "context-learning",
+    "hash": "more/learning",
+    "steps": [],
+    "expect": {
+      "heading": "판단 개선 기록",
+      "button": "회사 내부 개선에 동의하고 수집 시작",
+      "enabled": true
+    }
+  },
+  {
+    "name": "settings-advanced",
+    "hash": "more",
+    "steps": [
+      {
+        "click": "더 보기"
+      },
+      {
+        "click": "연결·보관 상태"
+      }
+    ],
+    "expect": {
+      "heading": "연결·보관 상태"
+    }
+  }
+]

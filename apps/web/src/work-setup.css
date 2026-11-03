@@ -1,0 +1,22 @@
+/* 첫 사용·자료 추가: 메뉴 없이 한 화면, 한 결정 */
+.setup-layout{max-width:680px;margin:0 auto;padding:8px 0 48px}
+.setup-fields{display:grid;gap:20px}
+.setup-fields label{display:grid;gap:10px;font-weight:800}
+.setup-summary{display:grid;gap:8px;padding:18px 20px;border:1px solid var(--line);border-radius:var(--radius-lg);background:var(--surface)}
+.setup-summary strong{font-size:var(--text-lg)}
+.setup-summary ul,.setup-layout details ul{padding-left:24px;overflow-wrap:anywhere;max-height:220px;overflow:auto;list-style:disc}
+.setup-consent{display:flex;align-items:flex-start;gap:12px;padding:12px 0;font-size:var(--text);line-height:1.6}
+.setup-consent input{flex:none;width:24px;height:24px;margin-top:6px;accent-color:var(--primary)}
+.setup-consent span{display:grid;gap:2px}
+.setup-layout .text-button{justify-self:start}
+.setup-layout .screen-action{position:static;margin-inline:0;padding-inline:0;background:none}
+
+.work-app .upload-file-list{list-style:none;padding:0;margin:0}
+.work-app .upload-file-list li{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.work-app .upload-file-list li>svg{flex:none;margin-top:4px;color:var(--primary)}
+.work-app .upload-file-list small{display:block;color:var(--danger);font-size:1.125rem;margin-top:4px}
+.work-app .upload-policy{font-size:1.125rem;color:var(--ink-2);line-height:1.6;margin:0}
+.work-app .upload-finished{display:grid;gap:18px;justify-items:start}
+.work-app .upload-finished>svg{color:var(--ok)}
+.work-app .upload-finished h2,.work-app .upload-finished p{margin:0}
+.work-app .upload-choose{display:grid;gap:12px}

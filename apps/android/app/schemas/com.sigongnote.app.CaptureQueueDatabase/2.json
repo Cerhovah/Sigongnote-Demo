@@ -1,0 +1,204 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "8c33da478018d5f828ba028838c8a445",
+    "entities": [
+      {
+        "tableName": "capture_queue",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`captureId` TEXT NOT NULL, `tenantId` TEXT NOT NULL, `userId` TEXT NOT NULL, `deviceId` TEXT NOT NULL, `sourceId` TEXT NOT NULL, `sourceGeneration` INTEGER NOT NULL, `state` TEXT NOT NULL, `encryptedCopyName` TEXT, `sha256` TEXT, `byteLength` INTEGER, `createdAtEpochMs` INTEGER NOT NULL, `updatedAtEpochMs` INTEGER NOT NULL, PRIMARY KEY(`captureId`))",
+        "fields": [
+          {
+            "fieldPath": "captureId",
+            "columnName": "captureId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tenantId",
+            "columnName": "tenantId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceId",
+            "columnName": "deviceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceId",
+            "columnName": "sourceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceGeneration",
+            "columnName": "sourceGeneration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedCopyName",
+            "columnName": "encryptedCopyName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "sha256",
+            "columnName": "sha256",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "byteLength",
+            "columnName": "byteLength",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "createdAtEpochMs",
+            "columnName": "createdAtEpochMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAtEpochMs",
+            "columnName": "updatedAtEpochMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "captureId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_capture_queue_sourceId_sourceGeneration_state",
+            "unique": false,
+            "columnNames": [
+              "sourceId",
+              "sourceGeneration",
+              "state"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_capture_queue_sourceId_sourceGeneration_state` ON `${TABLE_NAME}` (`sourceId`, `sourceGeneration`, `state`)"
+          },
+          {
+            "name": "index_capture_queue_tenantId_userId_deviceId_state",
+            "unique": false,
+            "columnNames": [
+              "tenantId",
+              "userId",
+              "deviceId",
+              "state"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_capture_queue_tenantId_userId_deviceId_state` ON `${TABLE_NAME}` (`tenantId`, `userId`, `deviceId`, `state`)"
+          }
+        ]
+      },
+      {
+        "tableName": "share_inbox",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`shareId` TEXT NOT NULL, `batchId` TEXT NOT NULL, `state` TEXT NOT NULL, `declaredMime` TEXT NOT NULL, `encryptedCopyName` TEXT, `sha256` TEXT, `byteLength` INTEGER, `failureCode` TEXT, `createdAtEpochMs` INTEGER NOT NULL, `duplicateOfShareId` TEXT, `uploadPath` TEXT NOT NULL, PRIMARY KEY(`shareId`))",
+        "fields": [
+          {
+            "fieldPath": "shareId",
+            "columnName": "shareId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "batchId",
+            "columnName": "batchId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "declaredMime",
+            "columnName": "declaredMime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedCopyName",
+            "columnName": "encryptedCopyName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "sha256",
+            "columnName": "sha256",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "byteLength",
+            "columnName": "byteLength",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "failureCode",
+            "columnName": "failureCode",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdAtEpochMs",
+            "columnName": "createdAtEpochMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "duplicateOfShareId",
+            "columnName": "duplicateOfShareId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "uploadPath",
+            "columnName": "uploadPath",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "shareId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_share_inbox_state_createdAtEpochMs",
+            "unique": false,
+            "columnNames": [
+              "state",
+              "createdAtEpochMs"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_share_inbox_state_createdAtEpochMs` ON `${TABLE_NAME}` (`state`, `createdAtEpochMs`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8c33da478018d5f828ba028838c8a445')"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "packId": "generic", "version": "1.0.0", "schemaVersion": 1,
+  "labels": { "ko": "일반 공정" },
+  "units": [{ "code": "ea", "dimension": "count", "label": "개" }, { "code": "lump", "dimension": "lump", "label": "식" }],
+  "itemAttributes": [],
+  "workflowNodes": [{ "id": "planned", "label": "계획", "after": [] }, { "id": "performed", "label": "시공", "after": ["planned"] }, { "id": "inspected", "label": "확인", "after": ["performed"] }],
+  "prerequisiteRules": [], "exceptionRules": [],
+  "costCategories": ["material", "labor", "transport", "other"],
+  "quoteTemplate": { "unitCodes": ["ea", "lump"], "requiredApprovalRevision": true },
+  "requiredEvidence": [{ "nodeId": "inspected", "kind": "inspection" }], "templateAdapters": []
+}

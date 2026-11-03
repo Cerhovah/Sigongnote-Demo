@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  },
+  "include": [
+    "apps/web/src",
+    "services/api/src",
+    "services/local-agent/src",
+    "packages/*/src",
+    "tests",
+    "scripts/generate-contracts.ts",
+    "scripts/check-native-contracts.ts",
+    "scripts/serve-work-preview.ts",
+    "scripts/serve-live-work.ts",
+    "scripts/e2e-showcase.mts"
+  ]
+}

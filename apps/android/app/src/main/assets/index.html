@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; connect-src 'none'; img-src 'self' data:; frame-src 'none'; object-src 'none'; base-uri 'none'">
+<title>시공노트</title><link rel="stylesheet" href="style.css"></head><body>
+<a href="work/index.html">내 업무자료로 돌아가기</a>
+<main><header><strong>시공노트</strong><button class="text-button" data-go="guide" type="button">사용법</button></header>
+<h1 id="page-title" tabindex="-1">휴대폰 자료</h1>
+<p id="notice" role="status" hidden></p>
+<div data-page="home">
+  <section data-chunk><h2>업무자료를 준비해요</h2><p id="connection" role="status">허용한 자료를 확인하고 있어요.</p>
+    <button id="open-sms-inbox" type="button" hidden>문자함 열기</button>
+    <button id="start-connection" type="button">새 자료 연결 선택</button><button id="continue-without" class="text-button" type="button">나중에 할게요</button></section>
+  <section data-chunk><button class="menu-row" data-go="sources" type="button">허용한 자료 보기 <span aria-hidden="true">›</span></button></section>
+</div>
+<div data-page="setup" hidden><section data-chunk><h2 id="setup-title">업무 폴더</h2><p id="setup-purpose"></p><p id="setup-next" role="status"></p>
+  <button id="setup-action" type="button">허용 화면 열기</button><button id="setup-skip" class="text-button" type="button">이번에는 건너뛰기</button></section></div>
+<div data-page="folders" hidden><section data-chunk><h2>연결한 업무 폴더</h2><p>현장별 폴더를 여러 개 연결할 수 있어요. 한 번 고르면 새 자료를 계속 살펴봐요.</p><p id="folder-count" role="status">연결한 폴더를 확인하고 있어요.</p><button id="add-folder" type="button">업무 폴더 추가</button><ul id="folder-list" aria-label="연결한 업무 폴더 목록"></ul><p>PC에서도 같은 회사로 로그인하면 서버에 보관된 자료를 함께 볼 수 있어요.</p></section></div>
+<div data-page="sources" hidden><section data-chunk><button class="menu-row" data-go="folders" type="button">연결한 폴더·폴더 추가 <span aria-hidden="true">›</span></button><ul id="connection-sources" aria-label="가져올 수 있는 자료"></ul></section></div>
+<div data-page="source" hidden><section data-chunk><h2 id="source-title"></h2><p id="source-health"></p><p id="source-purpose"></p><p id="source-coverage"></p>
+  <div id="folder-actions" hidden><button id="connect-folder" type="button">업무 폴더 추가</button><button class="text-button" data-go="folders" type="button">연결한 폴더 모두 보기</button></div>
+  <div id="notification-actions" hidden><button id="connect-notifications" type="button">업무 앱 고르기</button><button id="review-notifications" class="secondary" type="button">업무 대화 고르기</button><button id="manage-notifications" class="text-button" type="button">읽기 중지·권한</button></div>
+  <div id="sms-actions" hidden><button id="connect-sms" type="button">문자 사용 준비</button></div>
+  <button class="text-button" data-go="sources" type="button">← 허용한 자료</button></section></div>
+<div data-page="queue" hidden><section data-chunk><h2>이 휴대폰의 자료</h2><p id="queue" role="status">받은 자료를 확인하고 있어요.</p><p>서버 전송은 로그인과 별도 허용이 필요해요.</p>
+  <details><summary>자세히 보기</summary><ul id="queue-details"></ul></details></section>
+  <section data-chunk><button id="open-account" type="button">PC와 함께 쓰기</button><p>사진·문서 앱에서 ‘공유 → 시공노트’로 가져올 수도 있어요.</p></section></div>
+<div data-page="guide" hidden><section data-chunk><h2 id="guide-title">새 업무자료부터</h2><p id="guide-copy">문자·통화 녹음·사진 중 필요한 자료만 연결하세요.</p>
+  <button id="guide-action" type="button">새 자료 연결 선택</button><button id="guide-next" class="secondary" type="button">다음 사용법</button><button class="text-button" data-go="home" type="button">건너뛰기</button></section></div>
+</main><nav aria-label="자료 메뉴"><button class="text-button" data-go="home" type="button">사용 준비</button><button class="text-button" data-go="queue" type="button">자료</button></nav>
+<dialog id="setup-welcome" aria-labelledby="setup-welcome-title"><p>시공노트 사용 안내</p><h2 id="setup-welcome-title" tabindex="-1">현장 업무를<br>조금 더 편하게.</h2><ol><li><strong>자료 자동 정리</strong><p>문자·통화·사진 중 필요한 자료를 연결하면 도착 기록부터 업무일지에 보여요.</p></li><li><strong>필요한 판단만 확인</strong><p>질문에 한 번 답하면 관련 업무에 함께 반영해요.</p></li><li><strong>찾기와 새 문서 준비</strong><p>말하거나 글로 자료를 찾고 견적·발주·청구 초안을 준비해요.</p></li></ol><button id="welcome-start" type="button">확인했어요 · 시작하기</button></dialog>
+<script src="connection-model.js"></script><script src="shell.js"></script></body></html>

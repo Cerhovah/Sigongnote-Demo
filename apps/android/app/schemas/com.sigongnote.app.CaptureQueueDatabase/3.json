@@ -1,0 +1,452 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "6de6fb5cd70b7179a77802d36214fa7a",
+    "entities": [
+      {
+        "tableName": "capture_queue",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`captureId` TEXT NOT NULL, `tenantId` TEXT NOT NULL, `userId` TEXT NOT NULL, `deviceId` TEXT NOT NULL, `sourceId` TEXT NOT NULL, `sourceGeneration` INTEGER NOT NULL, `state` TEXT NOT NULL, `encryptedCopyName` TEXT, `sha256` TEXT, `byteLength` INTEGER, `createdAtEpochMs` INTEGER NOT NULL, `updatedAtEpochMs` INTEGER NOT NULL, PRIMARY KEY(`captureId`))",
+        "fields": [
+          {
+            "fieldPath": "captureId",
+            "columnName": "captureId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tenantId",
+            "columnName": "tenantId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceId",
+            "columnName": "deviceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceId",
+            "columnName": "sourceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceGeneration",
+            "columnName": "sourceGeneration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedCopyName",
+            "columnName": "encryptedCopyName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "sha256",
+            "columnName": "sha256",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "byteLength",
+            "columnName": "byteLength",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "createdAtEpochMs",
+            "columnName": "createdAtEpochMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAtEpochMs",
+            "columnName": "updatedAtEpochMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "captureId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_capture_queue_sourceId_sourceGeneration_state",
+            "unique": false,
+            "columnNames": [
+              "sourceId",
+              "sourceGeneration",
+              "state"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_capture_queue_sourceId_sourceGeneration_state` ON `${TABLE_NAME}` (`sourceId`, `sourceGeneration`, `state`)"
+          },
+          {
+            "name": "index_capture_queue_tenantId_userId_deviceId_state",
+            "unique": false,
+            "columnNames": [
+              "tenantId",
+              "userId",
+              "deviceId",
+              "state"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_capture_queue_tenantId_userId_deviceId_state` ON `${TABLE_NAME}` (`tenantId`, `userId`, `deviceId`, `state`)"
+          }
+        ]
+      },
+      {
+        "tableName": "share_inbox",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`shareId` TEXT NOT NULL, `batchId` TEXT NOT NULL, `state` TEXT NOT NULL, `declaredMime` TEXT NOT NULL, `encryptedCopyName` TEXT, `sha256` TEXT, `byteLength` INTEGER, `failureCode` TEXT, `createdAtEpochMs` INTEGER NOT NULL, `duplicateOfShareId` TEXT, `uploadPath` TEXT NOT NULL, PRIMARY KEY(`shareId`))",
+        "fields": [
+          {
+            "fieldPath": "shareId",
+            "columnName": "shareId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "batchId",
+            "columnName": "batchId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "declaredMime",
+            "columnName": "declaredMime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedCopyName",
+            "columnName": "encryptedCopyName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "sha256",
+            "columnName": "sha256",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "byteLength",
+            "columnName": "byteLength",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "failureCode",
+            "columnName": "failureCode",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdAtEpochMs",
+            "columnName": "createdAtEpochMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "duplicateOfShareId",
+            "columnName": "duplicateOfShareId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "uploadPath",
+            "columnName": "uploadPath",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "shareId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_share_inbox_state_createdAtEpochMs",
+            "unique": false,
+            "columnNames": [
+              "state",
+              "createdAtEpochMs"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_share_inbox_state_createdAtEpochMs` ON `${TABLE_NAME}` (`state`, `createdAtEpochMs`)"
+          }
+        ]
+      },
+      {
+        "tableName": "folder_sources",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`localSourceId` TEXT NOT NULL, `encryptedTreeUri` TEXT NOT NULL, `scopeVersion` INTEGER NOT NULL, `state` TEXT NOT NULL, `scanGeneration` INTEGER NOT NULL, `lastAttemptAtEpochMs` INTEGER, `lastSuccessfulScanAtEpochMs` INTEGER, `observedCount` INTEGER NOT NULL, `eligibleCount` INTEGER NOT NULL, `excludedCount` INTEGER NOT NULL, `pendingCount` INTEGER NOT NULL, `lastErrorCode` TEXT, `serverSourceId` TEXT, `serverGeneration` INTEGER, `selectedAtEpochMs` INTEGER NOT NULL, PRIMARY KEY(`localSourceId`))",
+        "fields": [
+          {
+            "fieldPath": "localSourceId",
+            "columnName": "localSourceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedTreeUri",
+            "columnName": "encryptedTreeUri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scopeVersion",
+            "columnName": "scopeVersion",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scanGeneration",
+            "columnName": "scanGeneration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastAttemptAtEpochMs",
+            "columnName": "lastAttemptAtEpochMs",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "lastSuccessfulScanAtEpochMs",
+            "columnName": "lastSuccessfulScanAtEpochMs",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "observedCount",
+            "columnName": "observedCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eligibleCount",
+            "columnName": "eligibleCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "excludedCount",
+            "columnName": "excludedCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pendingCount",
+            "columnName": "pendingCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastErrorCode",
+            "columnName": "lastErrorCode",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "serverSourceId",
+            "columnName": "serverSourceId",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "serverGeneration",
+            "columnName": "serverGeneration",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "selectedAtEpochMs",
+            "columnName": "selectedAtEpochMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "localSourceId"
+          ]
+        }
+      },
+      {
+        "tableName": "folder_observations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`observationId` TEXT NOT NULL, `localSourceId` TEXT NOT NULL, `documentIdHash` TEXT NOT NULL, `sha256` TEXT NOT NULL, `byteLength` INTEGER NOT NULL, `declaredMime` TEXT NOT NULL, `encryptedCopyName` TEXT NOT NULL, `providerSize` INTEGER, `providerModifiedAtEpochMs` INTEGER, `lastSeenGeneration` INTEGER NOT NULL, `state` TEXT NOT NULL, `observedAtEpochMs` INTEGER NOT NULL, `supersededBy` TEXT, PRIMARY KEY(`observationId`))",
+        "fields": [
+          {
+            "fieldPath": "observationId",
+            "columnName": "observationId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localSourceId",
+            "columnName": "localSourceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "documentIdHash",
+            "columnName": "documentIdHash",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sha256",
+            "columnName": "sha256",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "byteLength",
+            "columnName": "byteLength",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "declaredMime",
+            "columnName": "declaredMime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedCopyName",
+            "columnName": "encryptedCopyName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "providerSize",
+            "columnName": "providerSize",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "providerModifiedAtEpochMs",
+            "columnName": "providerModifiedAtEpochMs",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "lastSeenGeneration",
+            "columnName": "lastSeenGeneration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "observedAtEpochMs",
+            "columnName": "observedAtEpochMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "supersededBy",
+            "columnName": "supersededBy",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "observationId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_folder_observations_localSourceId_documentIdHash_sha256",
+            "unique": false,
+            "columnNames": [
+              "localSourceId",
+              "documentIdHash",
+              "sha256"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_folder_observations_localSourceId_documentIdHash_sha256` ON `${TABLE_NAME}` (`localSourceId`, `documentIdHash`, `sha256`)"
+          },
+          {
+            "name": "index_folder_observations_localSourceId_lastSeenGeneration",
+            "unique": false,
+            "columnNames": [
+              "localSourceId",
+              "lastSeenGeneration"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_folder_observations_localSourceId_lastSeenGeneration` ON `${TABLE_NAME}` (`localSourceId`, `lastSeenGeneration`)"
+          }
+        ]
+      },
+      {
+        "tableName": "folder_pending",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`localSourceId` TEXT NOT NULL, `documentIdHash` TEXT NOT NULL, `attempts` INTEGER NOT NULL, `providerSize` INTEGER, `providerModifiedAtEpochMs` INTEGER, PRIMARY KEY(`localSourceId`, `documentIdHash`))",
+        "fields": [
+          {
+            "fieldPath": "localSourceId",
+            "columnName": "localSourceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "documentIdHash",
+            "columnName": "documentIdHash",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "attempts",
+            "columnName": "attempts",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "providerSize",
+            "columnName": "providerSize",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "providerModifiedAtEpochMs",
+            "columnName": "providerModifiedAtEpochMs",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "localSourceId",
+            "documentIdHash"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6de6fb5cd70b7179a77802d36214fa7a')"
+    ]
+  }
+}

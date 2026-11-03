@@ -1,0 +1,11 @@
+{
+  "packId": "joinery", "version": "1.0.0", "schemaVersion": 1,
+  "labels": { "ko": "목창호" },
+  "units": [{ "code": "ea", "dimension": "count", "label": "개" }, { "code": "lump", "dimension": "lump", "label": "식" }, { "code": "day", "dimension": "labor", "label": "공수" }],
+  "itemAttributes": [{ "key": "opening", "type": "text", "required": false }, { "key": "frame_spec", "type": "text", "required": false }, { "key": "supplied_material", "type": "boolean", "required": false }],
+  "workflowNodes": [{ "id": "survey", "label": "실측", "after": [] }, { "id": "subframe", "label": "가틀", "after": ["survey"] }, { "id": "mainframe", "label": "본틀", "after": ["subframe"] }, { "id": "door", "label": "문짝", "after": ["mainframe"] }, { "id": "hardware", "label": "철물", "after": ["door"] }, { "id": "inspection", "label": "확인", "after": ["hardware"] }],
+  "prerequisiteRules": [{ "nodeId": "mainframe", "rule": { "op": "exists", "field": "frame_spec" } }],
+  "exceptionRules": [], "costCategories": ["material", "labor", "transport", "revisit", "defect"],
+  "quoteTemplate": { "unitCodes": ["ea", "lump", "day"], "requiredApprovalRevision": true },
+  "requiredEvidence": [{ "nodeId": "inspection", "kind": "inspection" }], "templateAdapters": []
+}

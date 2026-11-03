@@ -1,0 +1,22 @@
+{
+  "name": "@sigongnote/domain",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./read-input": {
+      "types": "./dist/evidence-search-input.d.ts",
+      "import": "./dist/evidence-search-input.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "zod": "4.6.5"
+  }
+}

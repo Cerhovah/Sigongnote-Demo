@@ -1,0 +1,260 @@
+[
+  {
+    "name": "Money",
+    "value": {
+      "currency": "KRW",
+      "minor": null,
+      "knowledge": "unknown"
+    }
+  },
+  {
+    "name": "Money",
+    "value": {
+      "currency": "KRW",
+      "minor": "99999999999999999999",
+      "knowledge": "known"
+    }
+  },
+  {
+    "name": "Money",
+    "value": {
+      "currency": "KRW",
+      "minor": "0",
+      "knowledge": "known"
+    }
+  },
+  {
+    "name": "Quantity",
+    "value": {
+      "value": "-0.000001",
+      "unit_code": "ea",
+      "raw_text": "합성 반품",
+      "semantic": "returned"
+    }
+  },
+  {
+    "name": "SourceDate",
+    "value": {
+      "raw": "6.02",
+      "inferred_components": [],
+      "precision": "unknown",
+      "date": null
+    }
+  },
+  {
+    "name": "ApiError",
+    "value": {
+      "error": {
+        "code": "NOT_FOUND",
+        "message_ko": "자료를 찾을 수 없습니다.",
+        "retryable": false,
+        "correlation_id": "11111111-1111-4111-8111-111111111111"
+      }
+    }
+  },
+  {
+    "name": "BridgeRequest",
+    "value": {
+      "bridgeVersion": 1,
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "method": "getConnectionState",
+      "payload": {}
+    }
+  },
+  {
+    "name": "BridgeRequest",
+    "value": {
+      "bridgeVersion": 1,
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "method": "getQueueSummary",
+      "payload": {}
+    }
+  },
+  {
+    "name": "BridgeRequest",
+    "value": {
+      "bridgeVersion": 1,
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "method": "logout",
+      "payload": {}
+    }
+  },
+  {
+    "name": "BridgeRequest",
+    "value": {
+      "bridgeVersion": 1,
+      "requestId": "11111111-1111-4111-8111-111111111111",
+      "method": "pauseSource",
+      "payload": {
+        "source_id": "11111111-1111-4111-8111-111111111111"
+      }
+    }
+  },
+  {
+    "name": "ProjectCreateRequest",
+    "value": {
+      "display_name": "Fixture site"
+    }
+  },
+  {
+    "name": "SiteFolderBindingRequest",
+    "value": {
+      "source_id": "11111111-1111-4111-8111-111111111111",
+      "source_generation": 1,
+      "scope_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "scope_mode": "company_common",
+      "project_id": null
+    }
+  },
+  {
+    "name": "SiteFolderBindingResponse",
+    "value": {
+      "id": "11111111-1111-4111-8111-111111111111",
+      "source_id": "11111111-1111-4111-8111-111111111111",
+      "source_generation": 1,
+      "scope_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "scope_mode": "company_common",
+      "project_id": null,
+      "version": 1
+    }
+  },
+  {
+    "name": "CaptureScope",
+    "value": {
+      "capture_method": "saf_tree",
+      "history_mode": "all",
+      "history_since": null,
+      "scope_mode": "work_dedicated",
+      "rule_version": 1,
+      "processing_policy_id": "local-fixture-v1",
+      "fingerprint_algorithm": "hmac-sha256-device-v1"
+    }
+  },
+  {
+    "name": "WorkspaceCreateRequest",
+    "value": {
+      "display_name": "합성 회사"
+    }
+  },
+  {
+    "name": "WorkspaceResponse",
+    "value": {
+      "tenant_id": "00000000-0000-4000-8000-000000000021",
+      "display_name": "합성 회사",
+      "role": "owner",
+      "version": 1
+    }
+  },
+  {
+    "name": "CaptureStorageUsage",
+    "value": {
+      "limit_bytes": 100000000000,
+      "used_bytes": 98765432100,
+      "reserved_bytes": 1234567890
+    }
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "photos.list",
+      "project_id": "11111111-1111-4111-8111-111111111111"
+    }
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "sheets.prepare",
+      "command": "{}"
+    }
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "sheets.file",
+      "id": "11111111-1111-4111-8111-111111111111",
+      "format": "pdf",
+      "action": "open"
+    }
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "deliveries.list",
+      "source_kind": "photo_sheet",
+      "source_id": "11111111-1111-4111-8111-111111111111"
+    }
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "deliveries.authorize",
+      "command": "{}"
+    }
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "conversation.turn",
+      "id": "11111111-1111-4111-8111-111111111111",
+      "client_turn_id": "22222222-2222-4222-8222-222222222222",
+      "text": "합성 현장 28개 찾아줘",
+      "input_kind": "voice",
+      "selected_project_id": "33333333-3333-4333-8333-333333333333"
+    }
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "learning.list",
+      "cursor": "11111111-1111-4111-8111-111111111111"
+    }
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "learning.read",
+      "id": "11111111-1111-4111-8111-111111111111"
+    }
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "learning.command",
+      "command": "{\"action\":\"consent\"}"
+    }
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "improvements.list"
+    }
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "improvements.command",
+      "command": "{\"action\":\"evaluate\"}"
+    }
+  },
+  {
+    "name": "WorkRequest",
+    "value": {
+      "route": "documents.complete",
+      "id": "11111111-1111-4111-8111-111111111111",
+      "client_command_id": "22222222-2222-4222-8222-222222222222",
+      "form": {
+        "issuer": {
+          "name": "합성업체",
+          "business_number": "000-00-00000",
+          "representative": "가상 대표"
+        },
+        "recipient": {
+          "contact": "합성 담당"
+        },
+        "payment_terms": "가상 조건",
+        "payment_account": "가상 계좌",
+        "note": "합성 계약 시험"
+      }
+    }
+  }
+]

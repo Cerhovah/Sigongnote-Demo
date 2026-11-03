@@ -1,0 +1,11 @@
+{
+  "packId": "wet-trade", "version": "1.0.0", "schemaVersion": 1,
+  "labels": { "ko": "습식 공정 예시" },
+  "units": [{ "code": "m2", "dimension": "area", "label": "㎡" }, { "code": "ea", "dimension": "count", "label": "장" }, { "code": "pack", "dimension": "count", "label": "포장" }, { "code": "day", "dimension": "labor", "label": "공수" }],
+  "itemAttributes": [{ "key": "lot", "type": "text", "required": false }, { "key": "waste_rate", "type": "decimal", "required": false }, { "key": "substrate_ready", "type": "boolean", "required": false }],
+  "workflowNodes": [{ "id": "substrate", "label": "바탕 준비", "after": [] }, { "id": "layout", "label": "면적 확인", "after": ["substrate"] }, { "id": "install", "label": "타일 시공", "after": ["layout"] }, { "id": "cure", "label": "양생", "after": ["install"] }, { "id": "inspection", "label": "검측", "after": ["cure"] }],
+  "prerequisiteRules": [{ "nodeId": "install", "rule": { "op": "equal", "field": "substrate_ready", "value": true } }],
+  "exceptionRules": [], "costCategories": ["material", "labor", "transport", "waste", "revisit"],
+  "quoteTemplate": { "unitCodes": ["m2", "ea", "pack", "day"], "requiredApprovalRevision": true },
+  "requiredEvidence": [{ "nodeId": "inspection", "kind": "inspection" }], "templateAdapters": []
+}

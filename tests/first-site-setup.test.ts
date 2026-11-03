@@ -1,0 +1,54 @@
+import assert from 'node:assert/strict';
+import {test} from 'node:test';
+import {randomUUID,generateKeyPairSync,createHash} from 'node:crypto';
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {parseStrictLocalEnv} from '../scripts/local-env-values.mjs';
+import {createStorageGateway} from '../services/api/src/storage.js';
+import {runParseOnce} from '../services/api/src/parse-worker.js';
+import {processingFixture} from './processing-fixture.js';
+import {createApp} from '../services/api/src/app.js';
+import {captureCapability} from '../services/api/src/capture-scope.js';
+
+test('first-site setup resumes across clients, uses CAS/idempotency, starts without historical parsing and isolates tenants',async()=>{
+ const db=await processingFixture(),f=await db.createFixture(),other=await db.createFixture();
+ const env=parseStrictLocalEnv(readFileSync('services/api/.env','utf8'));assert.equal(new URL(env.SUPABASE_URL!).hostname,'127.0.0.1');
+ const storage=createStorageGateway(env.SUPABASE_URL!,env.SUPABASE_SECRET_KEY!);let storagePath:string|undefined;
+ const app=createApp({db:db.api,storage,capturePolicy:db.config.policy,verifyToken:async()=>({userId:f.user,sessionId:f.session})});
+ const request=(method:'GET'|'POST',url:string,payload?:unknown,tenant=f.tenant)=>app.inject({method,url,headers:{authorization:'Bearer fixture','x-tenant-id':tenant},...(payload?{payload:JSON.stringify(payload),headers:{authorization:'Bearer fixture','x-tenant-id':tenant,'content-type':'application/json'}}:{})});
+ const save=(body:object,tenant=f.tenant)=>request('POST','/v1/work/setup',body,tenant);
+ try{
+  assert.equal((await request('GET','/v1/work/setup')).json().version,0);
+  assert.equal((await request('GET','/v1/work/setup')).json().completed,true,'existing accessible materials must not force the tutorial over deep links');
+  const create={action:'select',display_name:'합성 시작 현장',expected_version:0,client_command_id:randomUUID()};
+  const first=await save(create);assert.equal(first.statusCode,200,first.body);const row=first.json();
+  assert.deepEqual((await save(create)).json(),row,'network retry must not duplicate the site');
+  const context=(await request('GET','/v1/work/context')).json();assert.equal(context.setup.project_id,row.project_id);assert.equal(context.projects.length,1);
+  assert.equal((await save({...create,client_command_id:randomUUID()})).statusCode,409,'stale second device must not overwrite');
+  assert.equal((await save({...create,client_command_id:randomUUID()},other.tenant)).statusCode,404);
+  const finish={action:'complete',expected_version:1,client_command_id:randomUUID()};assert.equal((await save(finish)).statusCode,200,'empty site starts a journal without claiming a source is connected');
+  await db.admin`update app.evidence_organizations set project_id=${row.project_id}::uuid,state='linked',version=version+1 where tenant_id=${f.tenant}::uuid and revision_id=${f.revision}::uuid`;
+  assert.equal((await save(finish)).statusCode,200);
+  assert.equal((await request('GET','/v1/work/setup')).json().completed,true);
+  const switched=await save({action:'select',project_id:row.project_id,expected_version:2,client_command_id:randomUUID()});assert.equal(switched.statusCode,200);assert.equal(switched.json().completed,true,'changing a site must preserve finished onboarding');
+  const foreignProject=randomUUID();await db.admin`insert into app.projects(tenant_id,id,display_name) values(${other.tenant}::uuid,${foreignProject}::uuid,'합성 다른 회사')`;
+  assert.equal((await save({action:'select',project_id:foreignProject,expected_version:3,client_command_id:randomUUID()})).statusCode,404);
+  const jwk=generateKeyPairSync('ec',{namedCurve:'prime256v1'}).publicKey.export({format:'jwk'});
+  const device=await request('POST','/v1/work/setup/capture',{action:'device',key:randomUUID(),body:{platform:'web',app_version:'fixture',public_key_jwk:{kty:jwk.kty,crv:jwk.crv,x:jwk.x,y:jwk.y}}});assert.equal(device.statusCode,201,device.body);
+  const scope={capture_method:'manual_share',history_mode:'selected',history_since:null,scope_mode:'selected_items',rule_version:1,processing_policy_id:db.config.policy.id,fingerprint_algorithm:'hmac-sha256-device-v1'};
+  const source=await request('POST','/v1/work/setup/capture',{action:'source',key:randomUUID(),body:{device_id:device.json().id,kind:'manual_share',scope_fingerprint:'a'.repeat(64),consent_version:2,local_selection_consent:true,server_upload_consent:true,external_ai_consent:true,scope}});assert.equal(source.statusCode,201,source.body);
+  assert.equal(source.json().capability,'manual_only');
+  const binding=await request('POST','/v1/work/setup/capture',{action:'binding',key:randomUUID(),body:{source_id:source.json().id,source_generation:1,scope_fingerprint:'a'.repeat(64),scope_mode:'project',project_id:row.project_id}});assert.equal(binding.statusCode,201,binding.body);
+  const bytes=Buffer.from('합성 첫 현장: 내일 문틀 확인 요청. 승인 또는 인수는 미확인.'),hash=createHash('sha256').update(bytes).digest('hex');
+  const prepared=await request('POST','/v1/work/setup/capture',{action:'prepare',key:randomUUID(),body:{client_capture_id:randomUUID(),source_id:source.json().id,source_generation:1,sha256:hash,byte_length:bytes.length,declared_mime:'text/plain'}});assert.equal(prepared.statusCode,201,prepared.body);
+  storagePath=f.tenant+'/'+prepared.json().ingestion_id;
+  const put=await fetch(prepared.json().upload_url,{method:'PUT',headers:{'Content-Type':'text/plain','x-upsert':'false'},body:bytes});assert.equal(put.status,200,await put.text());
+  const receipt=await request('POST','/v1/work/setup/capture',{action:'complete',key:randomUUID(),id:prepared.json().ingestion_id,body:{sha256:hash,byte_length:bytes.length}});assert.equal(receipt.statusCode,200,receipt.body);
+  assert.equal(await runParseOnce({db:db.worker,policy:db.config.policy,tenantScope:f.tenant,python:resolve('services/document-worker/.venv',process.platform==='win32'?'Scripts/python.exe':'bin/python'),pythonRoot:resolve('services/document-worker'),download:async()=>bytes}),'stored');
+  const list=(await request('GET','/v1/work/materials?project_id='+row.project_id)).json();assert.ok(list.materials.some((m:{sha256:string})=>m.sha256===hash),'web selection must actually reach the chosen site');
+  assert.equal(captureCapability('sms','web',scope),'unsupported');assert.equal(captureCapability('folder','web',scope),'unsupported');
+  const dismiss={action:'dismiss',expected_version:3,client_command_id:randomUUID()};assert.equal((await save(dismiss)).json().dismissed,true);assert.equal((await save(dismiss)).json().version,4);
+  const abandoned=await request('POST','/v1/work/setup/capture',{action:'abandon',key:randomUUID(),id:prepared.json().ingestion_id,body:{sha256:hash,byte_length:bytes.length}});assert.equal(abandoned.statusCode,409,'abandon must refuse to remove a completed original');
+  assert.equal((await request('POST','/v1/work/setup/capture',{action:'https://example.test',key:randomUUID(),body:{}})).statusCode,400);
+ }finally{await app.close();if(storagePath)await storage.remove(storagePath);await db.cleanup();}
+});

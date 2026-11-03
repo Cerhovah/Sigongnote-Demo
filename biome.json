@@ -1,0 +1,23 @@
+{
+  "files": {
+    "includes": [
+      "**",
+      "!**/generated/**",
+      "!!tests/contracts-native/bin",
+      "!!tests/contracts-native/obj",
+      "!!packages/*/dist"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
+  },
+  "formatter": {
+    "enabled": false
+  },
+  "assist": {
+    "enabled": false
+  }
+}

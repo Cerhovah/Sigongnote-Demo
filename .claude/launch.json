@@ -1,0 +1,25 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ui-preview",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": [
+        "/c",
+        "node node_modules/typescript/bin/tsc -p packages/contracts/tsconfig.build.json && node node_modules/typescript/bin/tsc -p packages/domain/tsconfig.build.json && node node_modules/typescript/bin/tsc -p packages/ui/tsconfig.build.json && npm run dev --workspace @sigongnote/web -- --host 127.0.0.1 --port 5280 --strictPort"
+      ],
+      "port": 5280
+    },
+    {
+      "name": "live-links",
+      "runtimeExecutable": "pwsh",
+      "runtimeArgs": [
+        "-NoProfile",
+        "-File",
+        "scripts/start-work-preview.ps1",
+        "-StayRunning"
+      ],
+      "port": 5190
+    }
+  ]
+}

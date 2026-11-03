@@ -1,0 +1,22 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {syntheticRecovery} from '../scripts/recovery-synthetic.js';import {recoveryDrill} from '../scripts/recovery-drill.js';
+import {readFile} from 'node:fs/promises';
+import {verifyLocalDevelopmentDb} from '../scripts/db-gate.mjs';
+test('D19 complete synthetic server restore keeps all rows, money/receipts, source bytes and tenant isolation',{skip:process.env.SIGONGNOTE_RECOVERY_TEST!=='1'},async(t)=>{
+ assert.equal(process.env.GITHUB_ACTIONS,'true');assert.equal(process.env.RUNNER_ENVIRONMENT,'github-hosted');assert.equal(process.env.RUNNER_OS,'Linux');
+ assert.equal(process.env.SIGONGNOTE_RECOVERY_DISPOSABLE_VM,'1');assert.equal(process.env.SIGONGNOTE_E2E_DB,'0');
+ assert.equal((await verifyLocalDevelopmentDb()).status,'READY');
+ await assert.rejects(()=>recoveryDrill('production'),/INVALID_RECOVERY_SOURCE/);
+ const realBefore=await readFile('.work/recovery-latest.json','utf8').catch(()=>null);
+ const result=await syntheticRecovery({deviceOriginal:true});assert.equal(result.status,'verified_server_scope');assert.ok(result.app_tables>=100);assert.ok(result.rows>=9);assert.equal(result.objects,1);assert.equal(result.missing_originals,0);assert.equal(result.device_originals_not_checked,1);assert.equal(result.production_backup,false);assert.equal(result.native_keys_and_queues_verified,false);
+ assert.equal(result.auth_storage_metadata_equal,true);assert.ok(result.metadata_tables>0);assert.ok(result.rls_tables_checked>30);assert.ok(result.rls_nonempty_tables>0);
+ assert.ok(result.synthetic_owner_positive_checks>=2);
+ assert.equal(result.isolated_cluster_roles_verified,true);assert.equal(result.isolated.all_rows_equal,true);assert.equal(result.isolated.external_network,false);assert.equal(result.isolated.published_ports,0);assert.equal(result.isolated.app_role_login,false);assert.equal(result.isolated.provider_credentials_loaded,false);assert.equal(result.isolated.retained.unknown_delivery_attempts,1);assert.equal(result.isolated.retained.pending_outbox,1);assert.equal(result.full_product_restore_accepted,false);assert.equal(result.key_dependencies_verified,false);
+ assert.equal(result.learning_cases_seeded,3,'purpose consent, case snapshot and classification history included in full hash restore');
+ assert.equal(result.unknown_delivery_attempts_seeded,1);
+ assert.equal(result.improvement_tables_seeded,4,'fixed dataset, rule version, pointer and unknown experiment restored with all-column hashes');
+ t.diagnostic(JSON.stringify(result));
+ await assert.rejects(()=>syntheticRecovery({missingOriginal:true}),/RECOVERY_ORIGINALS_MISSING/);
+ assert.equal(await readFile('.work/recovery-latest.json','utf8').catch(()=>null),realBefore,'synthetic attempts must never replace actual recovery status');
+ const failed=JSON.parse(await readFile('.work/recovery-synthetic-latest.json','utf8'));assert.equal(failed.synthetic,true);assert.equal(failed.status,'incomplete');
+});

@@ -1,0 +1,18 @@
+.cloud-welcome{max-width:520px;margin:0 auto;padding:clamp(44px,9vh,104px) 24px 64px;color:var(--ink);font-family:var(--font);line-height:1.6;letter-spacing:-.025em}
+.cloud-welcome h1{font-size:clamp(32px,6vw,42px);font-weight:750;line-height:1.3;letter-spacing:-.045em;margin:24px 0 16px}
+.cloud-lead{font-size:20px;color:var(--ink-2);margin:0 0 32px}
+.cloud-login{display:grid;gap:14px;background:var(--surface);padding:20px 0}
+.cloud-login h2{font-size:22px;font-weight:700;margin:0}
+.cloud-login p{margin:0;font-size:18px;color:var(--ink-2)}
+.cloud-login .button-primary{display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;padding:14px 20px;min-height:56px;font-size:18px}
+.cloud-login input{box-sizing:border-box;min-height:56px;font:inherit;font-size:18px;padding:14px 16px;border:1px solid var(--line-control);border-radius:12px;width:100%}
+.cloud-login .naver-login{background:#03c75a;color:#082b16;font-weight:750;border:0;border-radius:12px}
+.cloud-login .naver-login:disabled{background:var(--surface-2);color:var(--ink-3);cursor:not-allowed}
+.cloud-footnote{font-size:18px;color:var(--ink-2);margin-top:24px}
+.cloud-account-bar{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:8px 24px;gap:16px;font-size:16px;background:var(--surface-2)}
+.cloud-account-bar button{min-height:48px;font:inherit}
+.cloud-entry .auth-actions,.auth-actions{display:grid;gap:12px}
+.cloud-intro{position:fixed;inset:0;margin:auto;width:min(520px,calc(100vw - 32px));max-height:calc(100dvh - 40px);overflow:auto;padding:28px;border:0;border-radius:20px;line-height:1.6;color:var(--ink);box-shadow:0 24px 100px #17233835}
+.cloud-intro::backdrop{background:#17233899}.cloud-intro h2{font-size:28px;line-height:1.4;outline:0}.cloud-intro ol{padding-left:24px}.cloud-intro li{padding:8px 0}.cloud-intro li span{display:block;font-size:18px;color:var(--ink-2)}.cloud-intro .button-primary{width:100%;min-height:56px;font-size:18px}
+.cloud-intro[open]{display:flex;flex-direction:column;overflow:hidden}.cloud-intro-body{min-height:0;overflow:auto;overscroll-behavior:contain}.cloud-intro>.button-primary{flex-shrink:0;margin-top:20px}
+.install-page{max-width:640px;padding-top:32px}.install-page h1{font-size:clamp(30px,4vw,40px);margin:24px 0 16px}.install-page .cloud-lead{font-size:20px;margin-bottom:20px}.install-page .cloud-login{margin:24px 0;padding:20px 0}.install-page li{margin:12px 0;font-size:18px}.install-page a{overflow-wrap:anywhere}.install-brand{font-weight:750;color:var(--primary);text-decoration:none;font-size:22px}.install-address{background:var(--surface-2);border-radius:14px;padding:20px;display:grid;gap:8px;font-size:18px}.install-page details summary{min-height:48px;cursor:pointer}.cloud-install-link{display:inline-flex;align-items:center;margin:16px 0;min-height:48px;font-size:18px}

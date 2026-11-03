@@ -1,0 +1,2 @@
+CREATE TABLE IF NOT EXISTS `share_inbox` (`shareId` TEXT NOT NULL, `batchId` TEXT NOT NULL, `state` TEXT NOT NULL, `declaredMime` TEXT NOT NULL, `encryptedCopyName` TEXT, `sha256` TEXT, `byteLength` INTEGER, `failureCode` TEXT, `createdAtEpochMs` INTEGER NOT NULL, `duplicateOfShareId` TEXT, `uploadPath` TEXT NOT NULL, PRIMARY KEY(`shareId`));
+CREATE INDEX IF NOT EXISTS `index_share_inbox_state_createdAtEpochMs` ON `share_inbox` (`state`, `createdAtEpochMs`);

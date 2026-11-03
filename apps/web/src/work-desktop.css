@@ -1,0 +1,29 @@
+/* One work surface; a quiet file-browser sidebar on desktop. */
+.work-layout,.work-focus-layout{min-width:0}
+.work-focus-layout{max-width:760px;margin:auto}
+@media(min-width:1000px){
+ .work-app{max-width:1480px;--gutter:32px;padding-inline:var(--gutter);letter-spacing:0}
+ html[data-nav="1"] .work-app{padding-bottom:32px}
+ .work-top{padding-inline:32px;border-inline:0;min-height:72px}
+ .work-brand{font-size:1.125rem}
+ .work-layout{display:grid;grid-template-columns:208px minmax(0,1fr);gap:56px;align-items:start}
+ .work-nav{position:sticky;top:96px;left:auto;right:auto;bottom:auto;display:flex;flex-direction:column;gap:6px;width:100%;max-width:none;margin:28px 0 0;padding:12px;background:var(--surface-2);border:0;border-radius:16px;box-shadow:none}
+ .work-nav a,.work-nav .nav-camera{flex-direction:row;justify-content:flex-start;gap:14px;min-height:54px;padding:12px 14px;border-radius:10px;font-size:1.125rem;font-weight:600;text-align:left;overflow-wrap:normal}
+ .work-nav a:hover,.work-nav .nav-camera:hover{background:var(--surface)}
+ .work-nav a[aria-current="page"]{background:var(--surface);color:var(--primary);box-shadow:0 1px 3px #17233808;font-weight:700}
+ .work-nav a[aria-current="page"]::before{display:none}
+ .work-nav a:last-child{margin-top:28px}
+ .work-nav .nav-camera svg{width:24px;height:24px;box-sizing:border-box;padding:0;margin:0;border-radius:0;background:transparent;color:var(--primary)}
+ .work-layout>.screen{width:100%;min-width:0;padding:12px 24px 48px 0;max-width:980px}
+ .screen-head,.screen-today .screen-head{margin:24px 0 36px}
+ .screen-body{gap:32px}
+ .screen-today .screen-head h1{font-size:1.5rem}
+ .screen-today .screen-body{max-width:840px;gap:28px}
+ .screen-today .today-composer{padding-top:16px}
+ .today-composer>h2{font-size:2.25rem;margin-bottom:14px}
+ .work-app .today-composer .composer-box input{min-height:98px;padding:18px 12px}
+ .composer-box{padding:8px 16px 14px}
+ html[data-nav="1"] .screen-action{position:static;margin-inline:0;padding-inline:0}
+ .screen-action{max-width:800px}
+ .first-action{justify-items:start}
+}

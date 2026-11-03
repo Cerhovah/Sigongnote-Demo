@@ -1,0 +1,9 @@
+import {DocumentFormSchema} from '@sigongnote/contracts';
+import {z} from 'zod';
+const money=z.string().regex(/^-?(0|[1-9][0-9]{0,15})$/);
+const line=z.strictObject({id:z.string().min(1).max(500),description:z.string().max(180),spec:z.string().max(180),unit:z.string().max(180),quantity:z.string().regex(/^-?(0|[1-9][0-9]{0,11})(\.[0-9]{1,6})?$/).nullable(),unit_price:money.nullable(),price_tax_mode:z.enum(['exclusive','inclusive','not_applicable']).optional(),rounding_adjustment:money.optional(),supply:money,tax:money});
+/** Recipient-only schema. Reject nested internal fields before the renderer process sees input. */
+export const PublicDocumentSchema=z.strictObject({document_number:z.string().regex(/^[QIPS]-[0-9]{7,12}$/),revision:z.number().int().positive(),template_version:z.enum(['kr-basic-v1','kr-business-v2']),form:DocumentFormSchema.optional(),issuer:z.strictObject({name:z.string().min(1).max(180)}),recipient:z.strictObject({name:z.string().min(1).max(180)}),project:z.strictObject({id:z.string().min(1).max(100),name:z.string().max(180)}),date:z.iso.date(),type:z.enum(['estimate','purchase_order','invoice','delivery_statement']),state:z.literal('approved'),missing:z.array(z.string()).length(0),lines:z.array(line).min(1).max(100),totals:z.strictObject({supply:money,tax:money,total:money}),terms:z.array(z.string().max(300)).max(20),disclosure_scope:z.literal('recipient'),basis_hash:z.string().regex(/^[a-f0-9]{64}$/),calculation_version:z.string().min(1).max(80)}).superRefine((d,ctx)=>{
+ if(d.template_version==='kr-basic-v1'&&d.form!==undefined)ctx.addIssue({code:'custom',message:'INVALID_TEMPLATE_FIELDS'});
+ if(new Set(d.lines.map(l=>l.id)).size!==d.lines.length||['supply','tax'].some(k=>d.lines.reduce((n,l)=>n+BigInt(l[k as 'supply'|'tax']),0n)!==BigInt(d.totals[k as 'supply'|'tax']))||BigInt(d.totals.supply)+BigInt(d.totals.tax)!==BigInt(d.totals.total))ctx.addIssue({code:'custom',message:'DOCUMENT_SUM_MISMATCH'});
+});

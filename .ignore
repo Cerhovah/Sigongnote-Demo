@@ -1,0 +1,4 @@
+# ripgrep(Claude Code Grep 도구)·fd 검색 제외 목록. Git 추적에는 영향 없음.
+# 0.2 ver/ 는 참조 금지 보관함(AGENTS 2), .work/ 는 비공개 영수증(명시한 검수 입력만 Read로 읽는다).
+0.2 ver/
+.work/

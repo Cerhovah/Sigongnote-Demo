@@ -1,0 +1,43 @@
+import assert from 'node:assert/strict';import {test} from 'node:test';import {randomUUID,createHash,generateKeyPairSync} from 'node:crypto';import {readFileSync} from 'node:fs';import postgres from 'postgres';
+import {createApp} from '../services/api/src/app.js';import {smsActivation,smsDocumentId} from '../services/api/src/sms-activation.js';import {LOCAL_CAPTURE_POLICY} from '../services/api/src/capture-scope.js';import {changeSmsActivation} from '../scripts/sms-activation.js';import {parseStrictLocalEnv} from '../scripts/local-env-values.mjs';import {verifyLocalDevelopmentDb} from '../scripts/db-gate.mjs';import {deleteFixtureTenants} from './fixture-cleanup.js';
+const hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
+test('N23 accepted evidence gates reads and uploads; expiry, revoke, reinstall and MMS revisions preserve identity',async()=>{
+ assert.equal((await verifyLocalDevelopmentDb()).status,'READY');const env=parseStrictLocalEnv(readFileSync('services/api/.env','utf8'));const admin=postgres(env.MIGRATION_DATABASE_URL!,{max:1}),db=postgres(env.DATABASE_URL!,{max:3});
+ const tenant=randomUUID(),user=randomUUID(),session=randomUUID(),foreign=randomUUID();let verified=0,read=0;const objects=new Map<string,Buffer>();
+ const app=createApp({db,verifyToken:async()=>({userId:user,sessionId:session}),capturePolicy:LOCAL_CAPTURE_POLICY,storage:{sign:async()=> 'http://127.0.0.1:54321/storage/v1/object/upload/sign/sigongnote-originals/fake?token=synthetic-test-signature-0000000000000000',verify:async(p,sha,len)=>{verified++;const b=objects.get(p)!;return {matches:b.length===len&&hash(b)===sha,sniffedMime:'text/plain'};},readBytes:async p=>{read++;return objects.get(p)!;},remove:async p=>{objects.delete(p);}}});
+ const call=(method:'GET'|'POST',url:string,payload?:object,company=tenant)=>app.inject({method,url,headers:{authorization:'Bearer fixture','x-tenant-id':company,'idempotency-key':randomUUID()},...(payload?{payload}:{})});
+ let seeded=false;
+ try{
+  await admin.begin(async tx=>{await tx`insert into auth.users(id) values (${user}::uuid)`;await tx`insert into auth.sessions(id,user_id) values (${session}::uuid,${user}::uuid)`;await tx`insert into app.tenants(id,display_name) values (${tenant}::uuid,'N23 fixture')`;await tx`insert into app.memberships(tenant_id,user_id,role) values (${tenant}::uuid,${user}::uuid,'owner')`;});seeded=true;
+  const jwk=generateKeyPairSync('ec',{namedCurve:'P-256'}).publicKey.export({format:'jwk'});
+  const device=(await call('POST','/v1/devices',{platform:'android',app_version:'n23-fixture',public_key_jwk:{kty:'EC',crv:'P-256',x:jwk.x,y:jwk.y}})).json().id;
+  const scope={capture_method:'sms_provider',scope_mode:'work_dedicated',history_mode:'all',history_since:null,rule_version:1,processing_policy_id:LOCAL_CAPTURE_POLICY.id,fingerprint_algorithm:'hmac-sha256-device-v1'};
+  const create=async()=>{const r=await call('POST','/v1/capture-sources',{device_id:device,kind:'sms',scope_fingerprint:hash(Buffer.from(randomUUID())),consent_version:2,scope,local_selection_consent:true,server_upload_consent:true,external_ai_consent:false});assert.equal(r.statusCode,201,r.body);return r.json();};
+  const source=await create();const evidence={schema:'sms-activation-v1',tenant_id:tenant,user_id:user,device_id:device,source_id:source.id,generation:1,scope_fingerprint:source.scope_fingerprint,processing_policy_id:scope.processing_policy_id,application_id:'com.sigongnote.app.smssync',certificate_sha256:'a'.repeat(64),installation_fingerprint:'b'.repeat(64),policy_evidence_sha256:'c'.repeat(64),installer_evidence_sha256:'d'.repeat(64),accepted_by:user,accepted_at:new Date(Date.now()-1000).toISOString(),expires_at:new Date(Date.now()+3600000).toISOString(),revoked_at:null};
+  const access=async(id=source.id,key?:string)=>(await call('GET',`/v1/capture-sources/${id}/sms-access${key?'?message_key='+key:''}`)).json();
+  const project=(await call('POST','/v1/projects',{display_name:'합성 문자 현장'})).json().id;
+  const binding={source_id:source.id,source_generation:1,scope_fingerprint:source.scope_fingerprint,scope_mode:'project',project_id:project,display_name:'업무 문자'};
+  const bound=await call('POST','/v1/site-folder-bindings',binding);assert.equal(bound.statusCode,201,bound.body);
+  assert.equal((await call('POST','/v1/site-folder-bindings',binding,foreign)).statusCode,404);
+  const key='f'.repeat(64),bundle={schema:'sms-sync-v1',kind:'mms',message_key:key,direction:'received',occurred_at:'2026-10-04T00:00:00Z',body:'합성 작업 문자',parts:[],missing_parts:1};let bytes=Buffer.from(JSON.stringify(bundle));
+  const prepare=async(id=source.id,extra={})=>call('POST','/v1/ingestions',{source_id:id,source_generation:1,client_capture_id:randomUUID(),sha256:hash(bytes),byte_length:bytes.length,declared_mime:'application/vnd.sigongnote.message+json',...extra});
+  const complete=async(id:string)=>call('POST',`/v1/ingestions/${id}/complete`,{sha256:hash(bytes),byte_length:bytes.length});
+  assert.equal((await access()).ready,false);assert.equal((await prepare()).statusCode,410);assert.equal(verified,0);assert.equal(read,0);
+  assert.equal((await call('GET',`/v1/capture-sources/${source.id}/sms-access`,undefined,foreign)).statusCode,404);
+  await changeSmsActivation(admin,evidence,false,true);assert.equal((await access()).ready,true);assert.equal((await call('GET','/v1/capture-sources')).json().sources[0].upload_ready,true);
+  await assert.rejects(admin.begin(async tx=>{await tx`set local role sigongnote_api`;await tx`select set_config('request.jwt.claim.sub',${user},true)`;await tx`update app.capture_sources set sms_activation=null where tenant_id=${tenant}::uuid and id=${source.id}::uuid`;}),/SMS activation|permission denied/);
+  for(const change of [{expires_at:new Date(Date.now()-1).toISOString()},{revoked_at:new Date().toISOString()},{scope_fingerprint:'0'.repeat(64)},{application_id:'com.sigongnote.app'},{generation:2}])assert.equal(smsActivation({...source,user_id:user,platform:'android',sms_activation:{...evidence,...change}}).ready,false);
+  let r=await prepare();assert.equal(r.statusCode,201,r.body);objects.set(`${tenant}/${r.json().ingestion_id}`,bytes);let done=await complete(r.json().ingestion_id);assert.equal(done.statusCode,200,done.body);const first=done.json();assert.equal(first.document_id,smsDocumentId(tenant,user,key));
+  // Reinstalled client has no local receipt. Server lookup finds its original document; a new source rebinds consent.
+  const journal=(await call('GET','/v1/work/journal?project_id='+project)).json();assert.equal(journal.items.length,1);assert.equal(journal.items[0].id,first.revision_id,'SMS appears in its selected site before parsing');
+  const next=await create();await changeSmsActivation(admin,{...evidence,source_id:next.id,scope_fingerprint:next.scope_fingerprint},false,true);
+  const previous=(await access(next.id,key)).previous;assert.equal(previous.revision_id,first.revision_id);
+  r=await prepare(next.id,{document_id:previous.document_id,predecessor_revision_id:previous.revision_id,expected_version:previous.revision_number});objects.set(`${tenant}/${r.json().ingestion_id}`,bytes);done=await complete(r.json().ingestion_id);assert.equal(done.statusCode,200,done.body);assert.equal(done.json().document_id,first.document_id);assert.equal(done.json().revision_number,2);
+  // Photo arrives later: same provider identity, a new immutable revision, no second document.
+  const prev=done.json();bytes=Buffer.from(JSON.stringify({...bundle,missing_parts:0,parts:[{id:'1',mime:'image/png',bytes_base64:Buffer.from('89504e470d0a1a0a','hex').toString('base64')}]}));
+  r=await prepare(next.id,{document_id:prev.document_id,predecessor_revision_id:prev.revision_id,expected_version:2});objects.set(`${tenant}/${r.json().ingestion_id}`,bytes);done=await complete(r.json().ingestion_id);assert.equal(done.statusCode,200,done.body);assert.equal(done.json().revision_number,3);
+  assert.equal((await admin`select count(*)::int n from app.documents where tenant_id=${tenant}::uuid`)[0]?.n,1);
+  // Pending bytes do not get read or completed after expiry/revocation.
+  r=await prepare();objects.set(`${tenant}/${r.json().ingestion_id}`,bytes);const before=[verified,read];await changeSmsActivation(admin,evidence,true,true);assert.equal((await access()).ready,false);assert.equal((await complete(r.json().ingestion_id)).statusCode,410);assert.deepEqual([verified,read],before);
+ }finally{await app.close();if(seeded)await admin.begin(async tx=>{await deleteFixtureTenants(tx,[tenant]);await tx`delete from auth.sessions where id=${session}::uuid`;await tx`delete from auth.users where id=${user}::uuid`;});await db.end();await admin.end();}
+});

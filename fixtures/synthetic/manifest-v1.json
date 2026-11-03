@@ -1,0 +1,9 @@
+{
+  "fixture_version": "C08-oracle-v1",
+  "structures_sha256": "76a3b432a35d3680b6338ae67075792117e9491ed4e00b6de675ebae3d8307f6",
+  "oracles_sha256": "52c7aa43ae52d2b3ac79142d910d221d37114c24fd4f06c3918ab2397b041539",
+  "registries_sha256": "02d87abc54de98ad813ae39d93d47f1232940ead8d51b5c4ea33bb59c6db624e",
+  "sourceIndex_sha256": "d75137ab93f3d8d69ef22b2fed5d451034585d723f5d91bb1e6d0b59dc745452",
+  "binary_assets": [],
+  "boundary": "Synthetic JSON models document structure and expected outcomes. No original I/S bytes, real HWP/XLS/PDF binary, parser pass, OS test or user acceptance is claimed."
+}

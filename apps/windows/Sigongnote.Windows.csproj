@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup><TargetFramework>net10.0-windows</TargetFramework><UseWindowsForms>true</UseWindowsForms><OutputType>WinExe</OutputType><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings><RestorePackagesWithLockFile>true</RestorePackagesWithLockFile><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
+<ItemGroup>
+  <InternalsVisibleTo Include="Sigongnote.Windows.Tests" />
+  <Compile Remove="tests/**/*.cs" />
+  <Compile Include="../../packages/contracts/generated/csharp/*.cs" Link="Contracts/%(Filename)%(Extension)" />
+</ItemGroup>
+<ItemGroup>
+  <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.12" />
+  <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4191.47" />
+</ItemGroup>
+<Target Name="BuildSharedWorkUi" BeforeTargets="PrepareForBuild">
+  <Exec Command="node scripts/build-native-work-ui.mjs" WorkingDirectory="$(MSBuildProjectDirectory)/../.." />
+  <ItemGroup>
+    <_WorkAsset Include="../../.work/native-assets/work/**/*" />
+    <Content Include="@(_WorkAsset)" Link="work-ui/%(_WorkAsset.RecursiveDir)%(_WorkAsset.Filename)%(_WorkAsset.Extension)" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+</Target>
+</Project>

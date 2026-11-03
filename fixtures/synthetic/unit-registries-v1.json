@@ -1,0 +1,6 @@
+{
+  "fixture_version": "C08-unit-registry-v1",
+  "base": ["ea","m","m2","m3","kg","ton","day","hour","lump","set","box","sheet","roll","l"],
+  "joinery-v1": ["frame","panel"],
+  "boundary": "joinery-v1 lists fixture-only planned pack units. C26 must register and version the actual pack before these units become accepted domain quantities."
+}

@@ -1,0 +1,32 @@
+import {configuredFax} from './fax-provider.js';
+import {configuredActivityObservers} from './work-activity.js';
+import {startDeliveryWorker} from './delivery-worker.js';
+import {startDocumentReadiness} from './document-readiness.js';
+import {startOwnerMemory} from './owner-memory.js';
+import {startImprovements} from './improvements.js';
+import {configuredShortStt} from "./short-stt.js";
+import {startAgentWorker} from './agent-runs.js';
+import {productAiConfig} from './product-ai-config.js';
+import {claudeRuntime,withClaudePlanner} from './claude-wiring.js';
+import {startContextRestore} from './context-restore.js';
+import {loadProductLocalEnvironment} from './product-ai-config.js';
+import {CapturePolicySchema} from '@sigongnote/contracts';
+import { LOCAL_CAPTURE_POLICY } from "./capture-scope.js";
+import { createApp } from "./app.js";
+import postgres from "postgres";
+import { assertRuntimeRole, createTokenVerifier } from "./auth.js";
+import { loadLocalApiConfig } from "./config.js";
+import { createStorageGateway } from "./storage.js";
+const { databaseUrl, supabaseUrl, publishableKey, secretKey } = loadLocalApiConfig();
+const productEnv={...process.env,APP_ENV:'development'};loadProductLocalEnvironment(productEnv);Object.assign(process.env,productEnv);
+const db = postgres(databaseUrl, { max: 10, connect_timeout: 5 });
+try { await assertRuntimeRole(db); }
+catch (error) { await db.end(); throw error; }
+const services={activityObserverUserIds:configuredActivityObservers(),fax:configuredFax(),agentRuntime:true,shortStt:configuredShortStt(), db, capturePolicy: process.env.CAPTURE_POLICY_JSON?CapturePolicySchema.parse(JSON.parse(process.env.CAPTURE_POLICY_JSON)):LOCAL_CAPTURE_POLICY, verifyToken: createTokenVerifier(supabaseUrl, publishableKey),storage: createStorageGateway(supabaseUrl, secretKey)};
+const app = createApp(services);startDeliveryWorker(app,services);startOwnerMemory(app,db,services.capturePolicy);startDocumentReadiness(app,services);startImprovements(app,services);const config=productAiConfig();startAgentWorker(app,services,withClaudePlanner(services,config?{config}:{}));
+const claude=claudeRuntime();if(claude)startContextRestore(app,services,claude);
+app.addHook("onClose", async () => { await db.end(); });
+const port = Number(process.env.PORT ?? 3001);
+if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error("Invalid PORT");
+await app.listen({host:"127.0.0.1",port});
+for (const signal of ["SIGINT", "SIGTERM"] as const) process.once(signal, () => { void app.close(); });
